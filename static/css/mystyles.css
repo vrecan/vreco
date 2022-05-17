@@ -472,10 +472,6 @@ Ensure the default browser behavior of the `hidden` attribute.
   margin-right: 1.5rem;
 }
 
-.mr-2 {
-  margin-right: 0.5rem;
-}
-
 .mt-4 {
   margin-top: 1rem;
 }
@@ -492,40 +488,12 @@ Ensure the default browser behavior of the `hidden` attribute.
   display: flex;
 }
 
-.hidden {
-  display: none;
-}
-
-.h-8 {
-  height: 2rem;
-}
-
-.h-3 {
-  height: 0.75rem;
-}
-
-.h-0\.5 {
-  height: 0.125rem;
-}
-
-.h-0 {
-  height: 0px;
-}
-
 .h-12 {
   height: 3rem;
 }
 
-.w-8 {
-  width: 2rem;
-}
-
-.w-3 {
-  width: 0.75rem;
-}
-
-.w-5 {
-  width: 1.25rem;
+.w-32 {
+  width: 8rem;
 }
 
 .w-full {
@@ -552,33 +520,9 @@ Ensure the default browser behavior of the `hidden` attribute.
   justify-content: space-between;
 }
 
-.space-y-2 > :not([hidden]) ~ :not([hidden]) {
-  --tw-space-y-reverse: 0;
-  margin-top: calc(0.5rem * calc(1 - var(--tw-space-y-reverse)));
-  margin-bottom: calc(0.5rem * var(--tw-space-y-reverse));
-}
-
-.rounded {
-  border-radius: 0.25rem;
-}
-
-.border {
-  border-width: 1px;
-}
-
-.border-teal-400 {
-  --tw-border-opacity: 1;
-  border-color: rgb(45 212 191 / var(--tw-border-opacity));
-}
-
-.bg-teal-500 {
+.bg-neutral-900 {
   --tw-bg-opacity: 1;
-  background-color: rgb(20 184 166 / var(--tw-bg-opacity));
-}
-
-.bg-gray-600 {
-  --tw-bg-opacity: 1;
-  background-color: rgb(75 85 99 / var(--tw-bg-opacity));
+  background-color: rgb(23 23 23 / var(--tw-bg-opacity));
 }
 
 .bg-gray-500 {
@@ -586,27 +530,8 @@ Ensure the default browser behavior of the `hidden` attribute.
   background-color: rgb(107 114 128 / var(--tw-bg-opacity));
 }
 
-.fill-current {
-  fill: currentColor;
-}
-
-.p-6 {
-  padding: 1.5rem;
-}
-
-.px-3 {
-  padding-left: 0.75rem;
-  padding-right: 0.75rem;
-}
-
-.py-2 {
-  padding-top: 0.5rem;
-  padding-bottom: 0.5rem;
-}
-
-.text-xl {
-  font-size: 1.25rem;
-  line-height: 1.75rem;
+.p-2 {
+  padding: 0.5rem;
 }
 
 .text-sm {
@@ -614,27 +539,14 @@ Ensure the default browser behavior of the `hidden` attribute.
   line-height: 1.25rem;
 }
 
-.font-semibold {
-  font-weight: 600;
-}
-
-.tracking-tight {
-  letter-spacing: -0.025em;
-}
-
 .text-white {
   --tw-text-opacity: 1;
   color: rgb(255 255 255 / var(--tw-text-opacity));
 }
 
-.text-teal-200 {
+.text-orange-600 {
   --tw-text-opacity: 1;
-  color: rgb(153 246 228 / var(--tw-text-opacity));
-}
-
-.hover\:border-white:hover {
-  --tw-border-opacity: 1;
-  border-color: rgb(255 255 255 / var(--tw-border-opacity));
+  color: rgb(234 88 12 / var(--tw-text-opacity));
 }
 
 .hover\:text-white:hover {
@@ -643,14 +555,6 @@ Ensure the default browser behavior of the `hidden` attribute.
 }
 
 @media (min-width: 768px) {
-  .md\:block {
-    display: block;
-  }
-
-  .md\:hidden {
-    display: none;
-  }
-
   .md\:w-auto {
     width: auto;
   }
