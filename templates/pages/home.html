@@ -3,12 +3,11 @@
 Home
 {{end}}
 {{define "body"}}
-<div> Hello world! In Body</div>
-
-<button hx-post="/clicked" hx-swap="outerHTML">
-Click Me
-</button>
+<div class="flex mb-4">
+  <div class="w-full bg-gray-500 h-12">
+  <button hx-post="/clicked" hx-swap="outerHTML">
+    Click Me
+  </button>
+  </div>
+</div>
 {{end}}
-
-
-
