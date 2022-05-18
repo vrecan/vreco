@@ -3,7 +3,6 @@
 Home
 {{end}}
 {{define "body"}}
-
 <div hx-sse="connect:/chatroom">
   Chatroom is open for business....
   <div hx-sse="swap:message" hx-swap="beforeend"> </div>
@@ -11,7 +10,9 @@ Home
 <div class="bg-grey shadow-md rounded px-8 pt-6 pb-8 mb-4">
   <label class="block text-gray-700 text-sm font-bold mb-2" for="username">
     Send a message
-  </label>  
-  <input class="shadow appearance-none border" type="text" name="msg" hx-post="/sendChat">
+  </label>
+  <div id="sendmsg">
+    {{template "chat_input.html" .}}
+  </div>
 </div>
 {{end}}
