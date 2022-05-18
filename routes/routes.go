@@ -41,10 +41,14 @@ func Setup(e *echo.Echo) {
 		messageChan = make(chan string)
 	}
 	templates := make(map[string]*template.Template)
-	templates["home.html"] = template.Must(template.ParseFiles("templates/pages/home.html", "templates/base.html"))
+	templates["home.html"] = template.Must(template.ParseFiles(
+		"templates/pages/home.html",
+		"templates/base.html",
+		"templates/partials/chat_input.html"))
 	templates["about.html"] = template.Must(template.ParseFiles("templates/pages/about.html", "templates/base.html"))
 	templates["clicked.html"] = template.Must(template.ParseFiles("templates/partials/clicked.html"))
 	templates["chat_msg.html"] = template.Must(template.ParseFiles("templates/partials/chat_msg.html"))
+	templates["chat_input.html"] = template.Must(template.ParseFiles("templates/partials/chat_input.html"))
 
 	e.Renderer = &TemplateRegistry{
 		templates: templates,
@@ -87,7 +91,7 @@ func Setup(e *echo.Echo) {
 				log.Println("no one listening for messages, not sending: ", msg)
 			}
 		}
-		return c.String(http.StatusOK, "success")
+		return c.Render(http.StatusOK, "chat_input.html", map[string]interface{}{})
 	})
 
 }
