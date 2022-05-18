@@ -73,7 +73,7 @@ func Setup(e *echo.Echo) {
 	})
 
 	e.GET("/chatroom", func(c echo.Context) error {
-		handler := handleSSE(c)
+		handler := handleSSE(c, e.Renderer)
 		handler(c.Response().Writer, c.Request())
 		return nil
 	})
@@ -96,7 +96,7 @@ func Setup(e *echo.Echo) {
 
 }
 
-func handleSSE(c echo.Context) http.HandlerFunc {
+func handleSSE(c echo.Context, t echo.Renderer) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		log.Printf("Get handshake from client")
 		// prepare the header
@@ -118,9 +118,9 @@ func handleSSE(c echo.Context) http.HandlerFunc {
 			// message will received here and printed
 			case msg := <-messageChan:
 				fmt.Println("Sending message through chatroom", msg)
-				c.Render(http.StatusOK, "chat_msg.html", map[string]interface{}{
+				t.Render(c.Response().Writer, "chat_msg.html", map[string]interface{}{
 					"msg": msg,
-				})
+				}, c)
 				fmt.Fprintf(w, "\n\n")
 				flusher.Flush()
 
