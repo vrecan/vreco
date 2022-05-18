@@ -44,6 +44,8 @@ func Setup(e *echo.Echo) {
 	templates["home.html"] = template.Must(template.ParseFiles("templates/pages/home.html", "templates/base.html"))
 	templates["about.html"] = template.Must(template.ParseFiles("templates/pages/about.html", "templates/base.html"))
 	templates["clicked.html"] = template.Must(template.ParseFiles("templates/partials/clicked.html"))
+	templates["chat_msg.html"] = template.Must(template.ParseFiles("templates/partials/chat_msg.html"))
+
 	e.Renderer = &TemplateRegistry{
 		templates: templates,
 	}
@@ -67,7 +69,7 @@ func Setup(e *echo.Echo) {
 	})
 
 	e.GET("/chatroom", func(c echo.Context) error {
-		handler := handleSSE()
+		handler := handleSSE(c)
 		handler(c.Response().Writer, c.Request())
 		return nil
 	})
@@ -90,7 +92,7 @@ func Setup(e *echo.Echo) {
 
 }
 
-func handleSSE() http.HandlerFunc {
+func handleSSE(c echo.Context) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		log.Printf("Get handshake from client")
 		// prepare the header
@@ -112,7 +114,10 @@ func handleSSE() http.HandlerFunc {
 			// message will received here and printed
 			case msg := <-messageChan:
 				fmt.Println("Sending message through chatroom", msg)
-				fmt.Fprintf(w, "data: %s\n\n", msg)
+				c.Render(http.StatusOK, "chat_msg.html", map[string]interface{}{
+					"msg": msg,
+				})
+				fmt.Fprintf(w, "\n\n")
 				flusher.Flush()
 
 			// connection is closed then defer will be executed
