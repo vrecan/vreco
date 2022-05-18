@@ -38,7 +38,6 @@ func main() {
 
 	death.WaitForDeathWithFunc(func() {
 		ctx, cancel := context.WithTimeout(context.Background(), 1*time.Second)
-
 		defer cancel()
 		if err := e.Shutdown(ctx); err != nil {
 			e.Logger.Fatal(err)
