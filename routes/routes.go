@@ -116,8 +116,7 @@ func handleSSE(c echo.Context, t echo.Renderer) http.HandlerFunc {
 			// message will received here and printed
 			case msg := <-messageChan:
 				fmt.Println("Sending message through chatroom", msg)
-				fmt.Fprintf(w, "data: ")
-				t.Render(c.Response().Writer, "chat_msg.html", map[string]interface{}{
+				t.Render(w, "chat_msg.html", map[string]interface{}{
 					"msg": msg,
 				}, c)
 				fmt.Fprintf(w, "\n\n")
