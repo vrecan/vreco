@@ -105,8 +105,6 @@ func handleSSE(c echo.Context, t echo.Renderer) http.HandlerFunc {
 		w.Header().Set("Connection", "keep-alive")
 		w.Header().Set("Access-Control-Allow-Origin", "*")
 
-		// instantiate the channel
-
 		// prepare the flusher
 		flusher, _ := w.(http.Flusher)
 
@@ -118,6 +116,7 @@ func handleSSE(c echo.Context, t echo.Renderer) http.HandlerFunc {
 			// message will received here and printed
 			case msg := <-messageChan:
 				fmt.Println("Sending message through chatroom", msg)
+				fmt.Fprintf(w, "data: ")
 				t.Render(c.Response().Writer, "chat_msg.html", map[string]interface{}{
 					"msg": msg,
 				}, c)
