@@ -122,6 +122,7 @@ func handleSSE(c echo.Context) http.HandlerFunc {
 
 			// connection is closed then defer will be executed
 			case <-r.Context().Done():
+				log.Println("Context is done exiting")
 				return
 
 			}
