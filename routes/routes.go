@@ -6,6 +6,7 @@ import (
 	"io"
 	"log"
 	"net/http"
+	"time"
 	"vreco/broadcast"
 
 	"html/template"
@@ -121,18 +122,18 @@ func handleSSE(c echo.Context, t echo.Renderer) http.HandlerFunc {
 		w.Header().Set("Connection", "keep-alive")
 		w.Header().Set("Access-Control-Allow-Origin", "*")
 
-		// prepare the flusher
 		flusher, _ := w.(http.Flusher)
 
 		list := bc.AddListener()
 		defer bc.RemoveListener(list)
 
-		// trap the request under loop forever
+		ticker := time.NewTicker(5 * time.Second)
+		defer ticker.Stop()
+
 		for {
 
 			select {
 
-			// message will received here and printed
 			case msg := <-list.Chan:
 				fmt.Println("Sending message through chatroom", msg)
 				t.Render(w, "chat_msg.html", map[string]interface{}{
@@ -140,8 +141,9 @@ func handleSSE(c echo.Context, t echo.Renderer) http.HandlerFunc {
 				}, c)
 				fmt.Fprintf(w, "\n\n")
 				flusher.Flush()
-
-			// connection is closed then defer will be executed
+			case <-ticker.C:
+				fmt.Fprintf(w, "keepalive: \n\n")
+				flusher.Flush()
 			case <-r.Context().Done():
 				log.Println("Context is done exiting")
 				return
