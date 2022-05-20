@@ -3,25 +3,18 @@
 About Me
 {{end}}
 {{define "body"}}
-<div class="flex mb-4">
-    <div class="w-full">
-        <p>
-            I'm Ben Aldrich, I am a principle software engineer at Logrhythm
-            specializing in big data and clustering software.
-        </p>
-        <p>
-            With over 15 years of experience building high performance software.
-            Programming Languages Go, C, C++, Java and Python.
-        </p>
+<div class="flex flex-auto">
+    <div class="hero max-h-screen">
+        <div class="hero-content text-center">
+            <div class="max-w-md">
+                <h1 class="text-5xl font-bold">Ben Aldrich</h1>
+                <p class="py-6">Senior Director of Engineering with a
+                    specializing in big data and clustering software.
+                    With over 15 years of experience building high performance
+                    software.
+                </p>
+            </div>
+        </div>
     </div>
 </div>
-
--- testing
-<div class="flex mb-4">
-    <div class="w-full bg-gray-500 h-12">
-    <button hx-post="/clicked" hx-swap="outerHTML">
-      Click Me
-    </button>
-    </div>
-  </div>
 {{end}}

@@ -6,14 +6,16 @@ import (
 	"io"
 	"log"
 	"net/http"
+	"vreco/broadcast"
 
 	"html/template"
 
 	"github.com/Masterminds/sprig"
 	"github.com/labstack/echo/v4"
+	"github.com/russross/blackfriday/v2"
 )
 
-var messageChan chan string
+var bc *broadcast.BroadCast
 
 // Define the template registry struct
 type TemplateRegistry struct {
@@ -36,27 +38,42 @@ func (t *TemplateRegistry) Render(w io.Writer, name string, data interface{}, c 
 
 }
 
+func markDowner(args ...interface{}) template.HTML {
+	fmt.Println("Calling markdown!: ", args)
+	s := blackfriday.Run([]byte(fmt.Sprintf("%s", args...)))
+	return template.HTML(s)
+}
+
 func Setup(e *echo.Echo) {
-	if messageChan == nil {
-		messageChan = make(chan string)
+	if bc == nil {
+		bc = broadcast.NewBroadcast()
 	}
+
+	functionMap := template.FuncMap{
+		"markdown": markDowner,
+	}
+	for k, v := range sprig.FuncMap() {
+		functionMap[k] = v
+	}
+
 	templates := make(map[string]*template.Template)
-	templates["home.html"] = template.Must(template.ParseFiles(
+	templates["home.html"] = template.Must(template.New("").Funcs(functionMap).ParseFiles(
 		"templates/pages/home.html",
+		"templates/base.html"))
+	templates["404.html"] = template.Must(template.New("").Funcs(functionMap).ParseFiles(
+		"templates/pages/404.html",
+		"templates/base.html"))
+	templates["blog.html"] = template.Must(template.New("").Funcs(functionMap).ParseFiles(
+		"templates/pages/blog.html",
 		"templates/base.html",
 		"templates/partials/chat_input.html"))
-	templates["about.html"] = template.Must(template.ParseFiles("templates/pages/about.html", "templates/base.html"))
-	templates["clicked.html"] = template.Must(template.ParseFiles("templates/partials/clicked.html"))
-	templates["chat_msg.html"] = template.Must(template.ParseFiles("templates/partials/chat_msg.html"))
-	templates["chat_input.html"] = template.Must(template.ParseFiles("templates/partials/chat_input.html"))
+	templates["about.html"] = template.Must(template.New("").Funcs(functionMap).ParseFiles("templates/pages/about.html", "templates/base.html"))
+	templates["clicked.html"] = template.Must(template.New("").Funcs(functionMap).ParseFiles("templates/partials/clicked.html"))
+	templates["chat_msg.html"] = template.Must(template.New("").Funcs(functionMap).ParseFiles("templates/partials/chat_msg.html"))
+	templates["chat_input.html"] = template.Must(template.New("").Funcs(functionMap).ParseFiles("templates/partials/chat_input.html"))
 
 	e.Renderer = &TemplateRegistry{
 		templates: templates,
-	}
-
-	// set funcmap for all templates
-	for _, template := range templates {
-		template.Funcs(sprig.FuncMap())
 	}
 
 	e.GET("/health", func(c echo.Context) error {
@@ -64,6 +81,12 @@ func Setup(e *echo.Echo) {
 	})
 	e.GET("/", func(c echo.Context) error {
 		return c.Render(http.StatusOK, "home.html", map[string]interface{}{})
+	})
+	e.GET("/blog", func(c echo.Context) error {
+		return c.Render(http.StatusOK, "blog.html", map[string]interface{}{})
+	})
+	e.GET("/404", func(c echo.Context) error {
+		return c.Render(http.StatusOK, "404.html", map[string]interface{}{})
 	})
 	e.GET("/about", func(c echo.Context) error {
 		return c.Render(http.StatusOK, "about.html", map[string]interface{}{})
@@ -81,15 +104,8 @@ func Setup(e *echo.Echo) {
 	e.POST("/sendChat", func(c echo.Context) error {
 		msg := c.FormValue("msg")
 
-		if messageChan != nil && msg != "" {
-
-			// send the message through the available channel
-			select {
-			case messageChan <- msg:
-				log.Println("message sent to channel: ", msg)
-			default:
-				log.Println("no one listening for messages, not sending: ", msg)
-			}
+		if bc != nil && msg != "" {
+			bc.Send(msg)
 		}
 		return c.Render(http.StatusOK, "chat_input.html", map[string]interface{}{})
 	})
@@ -108,13 +124,16 @@ func handleSSE(c echo.Context, t echo.Renderer) http.HandlerFunc {
 		// prepare the flusher
 		flusher, _ := w.(http.Flusher)
 
+		list := bc.AddListener()
+		defer bc.RemoveListener(list)
+
 		// trap the request under loop forever
 		for {
 
 			select {
 
 			// message will received here and printed
-			case msg := <-messageChan:
+			case msg := <-list.Chan:
 				fmt.Println("Sending message through chatroom", msg)
 				t.Render(w, "chat_msg.html", map[string]interface{}{
 					"msg": msg,

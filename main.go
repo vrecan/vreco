@@ -25,6 +25,10 @@ func main() {
 		Root:   "static",
 		Browse: false,
 	}))
+	e.Use(middleware.RecoverWithConfig(middleware.RecoverConfig{
+		StackSize: 1 << 10, // 1 KB
+		LogLevel:  log.ERROR,
+	}))
 	e.HTTPErrorHandler = customHTTPErrorHandler
 
 	routes.Setup(e)
@@ -50,9 +54,14 @@ func customHTTPErrorHandler(err error, c echo.Context) {
 	if he, ok := err.(*echo.HTTPError); ok {
 		code = he.Code
 	}
-	c.Logger().Error(err)
-	errorPage := fmt.Sprintf("%d.html", code)
-	if err := c.File(errorPage); err != nil {
-		c.Logger().Error(err)
+	host := c.Request().Host
+	URI := c.Request().RequestURI
+	qs := c.QueryString()
+
+	c.Logger().Error(err, fmt.Sprintf("on: %s%s%s error code: %d", host, URI, qs, code))
+	if code == 404 {
+		fmt.Println("HUH?")
+		c.Redirect(http.StatusTemporaryRedirect, "/404")
 	}
+	c.String(code, fmt.Sprintf("error code: %d", code))
 }
