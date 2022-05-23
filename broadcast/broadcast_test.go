@@ -1,10 +1,8 @@
 package broadcast
 
 import (
-	"fmt"
 	"testing"
 
-	"github.com/davecgh/go-spew/spew"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -18,7 +16,6 @@ func TestBroadcastAddElem(t *testing.T) {
 	lid := b.AddListener()
 	b.RemoveListener(lid)
 	assert.Equal(t, 0, len(b.Listeners))
-	spew.Println(b)
 }
 
 func TestBroadcastAddManyElem(t *testing.T) {
@@ -27,13 +24,41 @@ func TestBroadcastAddManyElem(t *testing.T) {
 	lids := make([]Listener, size)
 	for i := 0; i < size; i++ {
 		list := b.AddListener()
-		spew.Println(list)
 		lids = append(lids, list)
 	}
 	for _, v := range lids {
-		fmt.Println("ID:", v.ID)
 		b.RemoveListener(v)
 	}
 	assert.Equal(t, 0, len(b.Listeners))
-	spew.Println(b)
+
+}
+
+func TestBroadcastSendToMany(t *testing.T) {
+	size := 5
+	b := NewBroadcast()
+	lids := make([]Listener, size)
+	for i := 0; i < size; i++ {
+		list := b.AddListener()
+		lids = append(lids, list)
+	}
+	for _, v := range lids {
+
+		b.RemoveListener(v)
+	}
+	assert.Equal(t, 0, len(b.Listeners))
+
+	testMsg := "this is a test message for all"
+
+	go func() {
+		for _, listener := range lids {
+			msg := <-listener.Chan
+			assert.Equal(t, testMsg, msg)
+
+		}
+	}()
+	errors := b.Send(testMsg)
+	assert.Empty(t, errors)
+
+	errors = b.Send(testMsg)
+	assert.Empty(t, errors)
 }

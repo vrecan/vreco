@@ -4,7 +4,6 @@ import (
 	"errors"
 	"fmt"
 	"io"
-	"log"
 	"net/http"
 	"time"
 	"vreco/broadcast"
@@ -106,7 +105,10 @@ func Setup(e *echo.Echo) {
 		msg := c.FormValue("msg")
 
 		if bc != nil && msg != "" {
-			bc.Send(msg)
+			errs := bc.Send(msg)
+			for id, err := range errs {
+				e.Logger.Errorf("listener: %s %s", id, err)
+			}
 		}
 		return c.Render(http.StatusOK, "chat_input.html", map[string]interface{}{})
 	})
@@ -115,7 +117,6 @@ func Setup(e *echo.Echo) {
 
 func handleSSE(c echo.Context, t echo.Renderer) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		log.Printf("Get handshake from client")
 		// prepare the header
 		w.Header().Set("Content-Type", "text/event-stream")
 		w.Header().Set("Cache-Control", "no-cache")
@@ -135,7 +136,6 @@ func handleSSE(c echo.Context, t echo.Renderer) http.HandlerFunc {
 			select {
 
 			case msg := <-list.Chan:
-				fmt.Println("Sending message through chatroom", msg)
 				t.Render(w, "chat_msg.html", map[string]interface{}{
 					"msg": msg,
 				}, c)
@@ -145,7 +145,6 @@ func handleSSE(c echo.Context, t echo.Renderer) http.HandlerFunc {
 				fmt.Fprintf(w, "keepalive: \n\n")
 				flusher.Flush()
 			case <-r.Context().Done():
-				log.Println("Context is done exiting")
 				return
 
 			}

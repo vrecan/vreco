@@ -4,6 +4,7 @@ go 1.18
 
 require (
 	github.com/Masterminds/sprig v2.22.0+incompatible
+	github.com/google/uuid v1.3.0
 	github.com/gorilla/sessions v1.2.1
 	github.com/labstack/echo-contrib v0.12.0
 	github.com/labstack/echo/v4 v4.7.2
@@ -12,7 +13,6 @@ require (
 	github.com/stretchr/testify v1.7.1
 	github.com/vrecan/death v3.0.1+incompatible
 	golang.org/x/example v0.0.0-20220412213650-2e68773dfca0
-	golang.org/x/exp v0.0.0-20220518171630-0b5c67f07fdf
 )
 
 require (
@@ -21,7 +21,6 @@ require (
 	github.com/cihub/seelog v0.0.0-20170130134532-f561c5e57575 // indirect
 	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/golang-jwt/jwt v3.2.2+incompatible // indirect
-	github.com/google/uuid v1.3.0 // indirect
 	github.com/gopherjs/gopherjs v0.0.0-20200217142428-fce0ec30dd00 // indirect
 	github.com/gorilla/context v1.1.1 // indirect
 	github.com/gorilla/securecookie v1.1.1 // indirect

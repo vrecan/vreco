@@ -39,7 +39,6 @@ func (b *BroadCast) AddListener() Listener {
 		Chan: make(chan string),
 	}
 	b.Listeners[id] = list
-	fmt.Println("listeners ID: ", list.ID)
 	return list
 }
 
@@ -49,13 +48,16 @@ func (b *BroadCast) RemoveListener(list Listener) {
 	delete(b.Listeners, list.ID)
 }
 
-func (b *BroadCast) Send(msg string) {
-	for _, l := range b.Listeners {
-
+func (b *BroadCast) Send(msg string) (errors map[uuid.UUID]error) {
+	for id, l := range b.Listeners {
 		select {
 		case l.Chan <- msg:
 		default:
-			fmt.Println("failed to send message to chan for listner: ", l.ID)
+			if errors == nil {
+				errors = make(map[uuid.UUID]error, 0)
+			}
+			errors[id] = fmt.Errorf("failed to send message to listener")
 		}
 	}
+	return errors
 }

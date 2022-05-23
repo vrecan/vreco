@@ -60,7 +60,6 @@ func customHTTPErrorHandler(err error, c echo.Context) {
 
 	c.Logger().Error(err, fmt.Sprintf("on: %s%s%s error code: %d", host, URI, qs, code))
 	if code == 404 {
-		fmt.Println("HUH?")
 		c.Redirect(http.StatusTemporaryRedirect, "/404")
 	}
 	c.String(code, fmt.Sprintf("error code: %d", code))
