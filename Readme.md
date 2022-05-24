@@ -1,4 +1,6 @@
-# Vreco!!!
+# Vreco
+Main repository behind https://vreco.fly.dev.
+
 
 # Instructions
 
