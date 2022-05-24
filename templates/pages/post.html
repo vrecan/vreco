@@ -1,0 +1,15 @@
+
+{{define "title"}}
+{{.blog.Meta.Title}}
+{{end}}
+
+{{define "body"}}
+
+  <div class="card">
+    <div class="card-title"><h2>{{.blog.Meta.Title}}</h2></div>
+    <p>Posted: {{.blog.Meta.Date | date "2006-01-02"}}</p>
+    <div class="card-body">
+      {{.blog.Contents | markdown}}
+    </div>
+  </div>
+{{end}}

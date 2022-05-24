@@ -1,0 +1,5 @@
+Categories = ["Development"]
+Description = "Concurrent shutdown in golang"
+Tags = ["Development", "Golang", "Shutdown", "Signals", "Channels", "death"]
+date = "2015-03-19T22:11:18-06:00"
+title = "Concurrent Graceful Shutdown in Go"

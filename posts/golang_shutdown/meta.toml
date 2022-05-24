@@ -1,0 +1,5 @@
+Categories = ["Development"]
+Description = "Managing the death of go applications"
+Tags = ["Development", "Golang", "Shutdown", "Signals", "death"]
+date = "2015-03-10T20:23:05-06:00"
+title = "Managing Application Shutdown in Go"

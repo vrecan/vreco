@@ -31,7 +31,10 @@ func main() {
 	}))
 	e.HTTPErrorHandler = customHTTPErrorHandler
 
-	routes.Setup(e)
+	err := routes.Setup(e)
+	if err != nil {
+		panic(fmt.Sprintln("failed to setup routes: ", err))
+	}
 
 	go func() {
 		err := e.Start(":8080")
@@ -58,7 +61,7 @@ func customHTTPErrorHandler(err error, c echo.Context) {
 	URI := c.Request().RequestURI
 	qs := c.QueryString()
 
-	c.Logger().Error(err, fmt.Sprintf("on: %s%s%s error code: %d", host, URI, qs, code))
+	c.Logger().Error(err, fmt.Sprintf(" on: %s%s%s error code: %d", host, URI, qs, code))
 	if code == 404 {
 		c.Redirect(http.StatusTemporaryRedirect, "/404")
 	}

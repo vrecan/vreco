@@ -2,19 +2,14 @@
 {{define "title"}}
 Blog
 {{end}}
-
 {{define "body"}}
-<div hx-sse="connect:/chatroom" class="card text-center border bg-base-100
-  shadow-xl p-8">
-  Chatroom is open for business....
-  <div hx-sse="swap:message" hx-swap="beforeend" class="card-body"> </div>
-</div>
-<div>
-  <label class="block text-sm font-bold mb-2" for="username">
-    Send a message
-  </label>
-  <div id="sendmsg" class="">
-    {{template "chat_input.html" .}}
+  {{range $i, $b := .blogs}}
+  <div class="card">
+    <div class="card-title"><h2>{{$b.Meta.Title}}</h2></div>
+    <p>Posted: {{$b.Meta.Date | date "2006-01-02"}}</p>
+    <div class="card-body">
+      {{$b.Contents | markdown}}
+    </div>
   </div>
-</div>
+  {{end}}
 {{end}}
