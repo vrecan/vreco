@@ -3,15 +3,16 @@
 # Instructions
 
 ## Linux
-```
-sudo apt-get install npm && npm install -D tailwindcss
-go install github.com/cosmtrek/air@latest
-./run.sh
+```bash
+sudo apt-get install npm && npm install 
+go install github.com/cosmtrek/air@v1.29.0
+~/go/bin/air
+
 ```
 
 ## OSX
-```
-brew install npm && npm install -D tailwindcss
-go install github.com/cosmtrek/air@latest
-./run.sh
+```bash
+brew install npm && npm install 
+go install github.com/cosmtrek/air@v1.29.0
+~/go/bin/air
 ```
