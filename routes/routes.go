@@ -3,6 +3,7 @@ package routes
 import (
 	"errors"
 	"fmt"
+	"html/template"
 	"io"
 	"io/ioutil"
 	"net/http"
@@ -11,12 +12,12 @@ import (
 	"sort"
 	"time"
 	"vreco/broadcast"
-
-	"html/template"
+	vMiddleware "vreco/routes/middleware"
 
 	"github.com/BurntSushi/toml"
 	"github.com/Masterminds/sprig"
 	"github.com/labstack/echo/v4"
+	"github.com/labstack/echo/v4/middleware"
 	"github.com/russross/blackfriday/v2"
 )
 
@@ -29,17 +30,17 @@ type TemplateRegistry struct {
 
 // Implement e.Renderer interface
 func (t *TemplateRegistry) Render(w io.Writer, name string, data interface{}, c echo.Context) error {
-	tmpl, ok := t.templates[name]
+	template, ok := t.templates[name]
 	if !ok {
 		err := errors.New("Template not found -> " + name)
 		return err
 	}
 	// if we are loading a partial base will be missing
-	base := tmpl.Lookup("base.html")
+	base := template.Lookup("base.html")
 	if base == nil {
-		return tmpl.ExecuteTemplate(w, name, data)
+		return template.ExecuteTemplate(w, name, data)
 	}
-	return tmpl.ExecuteTemplate(w, "base.html", data)
+	return template.ExecuteTemplate(w, "base.html", data)
 
 }
 
@@ -52,6 +53,8 @@ func Setup(e *echo.Echo) error {
 	if bc == nil {
 		bc = broadcast.NewBroadcast()
 	}
+	SetupStaticAssets(e)
+
 	blogs, err := GenerateBlogHtml("posts/")
 	if err != nil {
 		return err
@@ -89,18 +92,20 @@ func Setup(e *echo.Echo) error {
 		templates: templates,
 	}
 
-	e.GET("/health", func(c echo.Context) error {
+	root := e.Group("/", vMiddleware.CacheControl(0))
+
+	root.GET("health", func(c echo.Context) error {
 		return c.String(http.StatusOK, "ok")
 	})
-	e.GET("/", func(c echo.Context) error {
+	root.GET("", func(c echo.Context) error {
 		return c.Render(http.StatusOK, "home.html", map[string]interface{}{})
 	})
-	e.GET("/blog", func(c echo.Context) error {
+	root.GET("blog", func(c echo.Context) error {
 		return c.Render(http.StatusOK, "blog.html", map[string]interface{}{
 			"blogs": blogs,
 		})
 	})
-	e.GET("/blog/post/:name", func(c echo.Context) error {
+	root.GET("blog/post/:name", func(c echo.Context) error {
 		var name string
 		for range c.ParamNames() {
 			for _, value := range c.ParamValues() {
@@ -117,26 +122,26 @@ func Setup(e *echo.Echo) error {
 		})
 
 	})
-	e.GET("/live_chat", func(c echo.Context) error {
+	root.GET("live_chat", func(c echo.Context) error {
 		return c.Render(http.StatusOK, "live_chat.html", map[string]interface{}{})
 	})
-	e.GET("/404", func(c echo.Context) error {
+	root.GET("404", func(c echo.Context) error {
 		return c.Render(http.StatusOK, "404.html", map[string]interface{}{})
 	})
-	e.GET("/about", func(c echo.Context) error {
+	root.GET("about", func(c echo.Context) error {
 		return c.Render(http.StatusOK, "about.html", map[string]interface{}{})
 	})
-	e.POST("/clicked", func(c echo.Context) error {
+	root.POST("clicked", func(c echo.Context) error {
 		return c.Render(http.StatusOK, "clicked.html", map[string]interface{}{})
 	})
 
-	e.GET("/chatroom", func(c echo.Context) error {
+	root.GET("chatroom", func(c echo.Context) error {
 		handler := handleSSE(c, e.Renderer)
 		handler(c.Response().Writer, c.Request())
 		return nil
 	})
 
-	e.POST("/sendChat", func(c echo.Context) error {
+	e.POST("sendChat", func(c echo.Context) error {
 		msg := c.FormValue("msg")
 
 		if bc != nil && msg != "" {
@@ -148,6 +153,13 @@ func Setup(e *echo.Echo) error {
 		return c.Render(http.StatusOK, "chat_input.html", map[string]interface{}{})
 	})
 	return nil
+}
+
+func SetupStaticAssets(e *echo.Echo) {
+	e.Use(vMiddleware.CacheControl(0), middleware.StaticWithConfig(middleware.StaticConfig{
+		Root:   "static",
+		Browse: false,
+	}))
 }
 
 func getBlog(name string, blogs Blogs) (blog *Blog, err error) {

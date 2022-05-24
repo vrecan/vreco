@@ -3,9 +3,9 @@
 Blog
 {{end}}
 {{define "body"}}
+<div class="p-2">
 <div class="flex flex-col gap-2">
   {{range $i, $b := .blogs}}
-  
   <div class="card p-2 border bg-base-100 shadow-xl auto-cols-max">
     <div class="card-title"><a href="/blog/post/{{$b.Meta.Title}}" class="text-white"><h2>{{$b.Meta.Title}}</h2></a></div>
     <p>Posted: {{$b.Meta.Date | date "2006-01-02"}}</p>
@@ -14,5 +14,6 @@ Blog
     </div>
   </div>
   {{end}}
+</div>
 </div>
 {{end}}

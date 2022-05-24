@@ -21,16 +21,12 @@ func main() {
 
 	e := echo.New()
 	e.Logger.SetLevel(log.INFO)
-	e.Use(middleware.StaticWithConfig(middleware.StaticConfig{
-		Root:   "static",
-		Browse: false,
-	}))
 	e.Use(middleware.RecoverWithConfig(middleware.RecoverConfig{
 		StackSize: 1 << 10, // 1 KB
 		LogLevel:  log.ERROR,
 	}))
-	e.HTTPErrorHandler = customHTTPErrorHandler
 
+	e.HTTPErrorHandler = customHTTPErrorHandler
 	err := routes.Setup(e)
 	if err != nil {
 		panic(fmt.Sprintln("failed to setup routes: ", err))
