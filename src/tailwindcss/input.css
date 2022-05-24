@@ -14,7 +14,7 @@
     }
 
     a {
-        @apply primary underline;
+        @apply text-orange-600 underline;
     }
 }
 

@@ -5,7 +5,7 @@ Blog
 {{define "body"}}
   {{range $i, $b := .blogs}}
   <div class="card">
-    <div class="card-title"><h2>{{$b.Meta.Title}}</h2></div>
+    <div class="card-title"><a href="/blog/post/{{$b.Meta.Title}}" class="text-white"><h2>{{$b.Meta.Title}}</h2></a></div>
     <p>Posted: {{$b.Meta.Date | date "2006-01-02"}}</p>
     <div class="card-body">
       {{$b.Contents | markdown}}
