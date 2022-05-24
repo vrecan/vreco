@@ -63,7 +63,7 @@ death.WaitForDeath(object1, object2, object3)
 
 ### ***Update***
 The newest version now does closing of objects in parallel with a timeout. This allows you to limit how long you are willing to wait for shutdown of all your objects. Because they are in parallel this is the total time you are willing to wait and not per object.
-[Parallel shutdown in go](/post/death_parallel_shutdown/ "Application shutdown library for golang").
+[Parallel shutdown in go](/blog/post/Concurrent%20Graceful%20Shutdown%20in%20Go "Application shutdown library for golang").
 
 ### Summary
 I'm actually pretty happy with this library. It does everything I need it to do and has been really useful to just drop in and have solid shutdown management. It does currently use seelog to log a few things this could easily be removed. All of our applications use seelog for application logs but I would love to hear if there are any good ideas about managing logging inside of libraries. I've thought about having the ablilty to pass in a logger with an interface but I would like to hear how other people deal with this.
