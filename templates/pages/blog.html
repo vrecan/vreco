@@ -4,7 +4,9 @@ Blog
 {{end}}
 
 {{define "body"}}
+
 <div class="p-2">
+
   <div class="flex flex-col gap-2">
     <div class="card p-2 border bg-base-100 shadow-xl">
       <div class="card-title"><a href="/blog/post/{{.blog.Meta.Title}}"
@@ -17,7 +19,9 @@ Blog
 
     <div hx-get="/blog/card?id=1"
       hx-trigger="revealed">
+        <p  alt="Result loading..." class="htmx-indicator h-60 w-60 text-center"> Loading more blog posts...</p>
     </div>
   </div>
 </div>
+
 {{end}}

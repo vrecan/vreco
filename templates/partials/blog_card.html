@@ -10,6 +10,9 @@
 {{if .nextID}}
 <div class="py-2"
   hx-get="/blog/card?id={{.nextID}}"
-  hx-trigger="revealed"></div>
+  hx-trigger="revealed">
+  <p alt="Result loading..." class="htmx-indicator h-60 w-60 text-center">
+    Loading more blog posts...</p>
+</div>
 {{end}}
 {{end}}
