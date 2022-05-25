@@ -5,11 +5,12 @@
 
 {{define "body"}}
 
-  <div class="card px-2 border bg-base-100 shadow-xl">
-    <div class="card-title"><h2>{{.blog.Meta.Title}}</h2></div>
-    <p>Posted: {{.blog.Meta.Date | date "2006-01-02"}}</p>
-    <div class="card-body">
-      {{.blog.Contents | markdown}}
-    </div>
+<div class="card px-2 border bg-base-100 shadow-xl">
+  <div class="card-title"><a href="/blog/post/{{.blog.Meta.Title}}"
+      class="text-white"><h2>{{.blog.Meta.Title}}</h2></a></div>
+  <h3>Posted: {{.blog.Meta.Date | date "2006-01-02"}}</h3>
+  <div class="card-body">
+    {{.blog.Contents | markdown}}
   </div>
+</div>
 {{end}}
