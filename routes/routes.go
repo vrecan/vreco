@@ -10,6 +10,7 @@ import (
 	"os"
 	"path/filepath"
 	"sort"
+	"strconv"
 	"time"
 	"vreco/broadcast"
 	vMiddleware "vreco/routes/middleware"
@@ -83,6 +84,8 @@ func Setup(e *echo.Echo) error {
 	templates["post.html"] = template.Must(template.New("").Funcs(functionMap).ParseFiles(
 		"templates/pages/post.html",
 		"templates/base.html"))
+	templates["blog_card.html"] = template.Must(template.New("").Funcs(functionMap).ParseFiles(
+		"templates/partials/blog_card.html"))
 	templates["about.html"] = template.Must(template.New("").Funcs(functionMap).ParseFiles("templates/pages/about.html", "templates/base.html"))
 	templates["clicked.html"] = template.Must(template.New("").Funcs(functionMap).ParseFiles("templates/partials/clicked.html"))
 	templates["chat_msg.html"] = template.Must(template.New("").Funcs(functionMap).ParseFiles("templates/partials/chat_msg.html"))
@@ -101,8 +104,28 @@ func Setup(e *echo.Echo) error {
 		return c.Render(http.StatusOK, "home.html", map[string]interface{}{})
 	})
 	root.GET("blog", func(c echo.Context) error {
+		params := make(map[string]string, 0)
+		for _, k := range c.ParamNames() {
+			for _, value := range c.ParamValues() {
+				params[k] = value
+			}
+		}
+		PID, exist := params["id"]
+		var ID int
+		if !exist {
+			ID = 0
+		} else {
+			ID, err = strconv.Atoi(PID)
+		}
+		if err != nil {
+			return err
+		}
+		blog, err := getBlogByID(ID, blogs)
+		if err != nil {
+			return err
+		}
 		return c.Render(http.StatusOK, "blog.html", map[string]interface{}{
-			"blogs": blogs,
+			"blog": blog,
 		})
 	})
 	root.GET("blog/post/:name", func(c echo.Context) error {
@@ -112,13 +135,45 @@ func Setup(e *echo.Echo) error {
 				name = value
 			}
 		}
-		blog, err := getBlog(name, blogs)
+		blog, err := getBlogByName(name, blogs)
 		if err != nil {
 			return c.Render(http.StatusOK, "404.html", map[string]interface{}{})
 		}
 		return c.Render(http.StatusOK, "post.html", map[string]interface{}{
 			"blog": blog,
 			"name": name,
+		})
+
+	})
+
+	root.GET("blog/card", func(c echo.Context) error {
+		params := make(map[string]string, 0)
+		QID := c.QueryParam("id")
+		var ID int
+		nextID := new(int)
+		if QID == "" {
+			return fmt.Errorf("invalid card id")
+		}
+		ID, err = strconv.Atoi(QID)
+		if err != nil {
+			return err
+		}
+		fmt.Println("ID: ", ID, params)
+		blog, err := getBlogByID(ID, blogs)
+		if err != nil {
+			return err
+		}
+
+		if ID+1 <= len(blogs)-1 {
+			*nextID = ID + 1
+			return c.Render(http.StatusOK, "blog_card.html", map[string]interface{}{
+				"blog":   blog,
+				"nextID": nextID,
+			})
+		}
+		//invalid nextID so don't render it
+		return c.Render(http.StatusOK, "blog_card.html", map[string]interface{}{
+			"blog": blog,
 		})
 
 	})
@@ -162,9 +217,18 @@ func SetupStaticAssets(e *echo.Echo) {
 	}))
 }
 
-func getBlog(name string, blogs Blogs) (blog *Blog, err error) {
+func getBlogByName(name string, blogs Blogs) (blog *Blog, err error) {
 	for _, b := range blogs {
 		if b.Meta.Title == name {
+			return &b, nil
+		}
+	}
+	return nil, fmt.Errorf("no blog found")
+}
+
+func getBlogByID(id int, blogs Blogs) (blog *Blog, err error) {
+	for i, b := range blogs {
+		if id == i {
 			return &b, nil
 		}
 	}

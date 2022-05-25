@@ -1,0 +1,15 @@
+{{define "blog_card.html"}}
+{{/* Infinite scroll blog posts */}}
+<div class="card p-2 border bg-base-100 shadow-xl">
+  <div class="card-title"><h2>{{.blog.Meta.Title}}</h2></div>
+  <h3>Posted: {{.blog.Meta.Date | date "2006-01-02"}}</h3>
+  <div class="card-body">
+    {{.blog.Contents | markdown}}
+  </div>
+</div>
+{{if .nextID}}
+<div class="py-2"
+  hx-get="/blog/card?id={{.nextID}}"
+  hx-trigger="revealed"></div>
+{{end}}
+{{end}}
