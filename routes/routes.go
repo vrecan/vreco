@@ -147,7 +147,6 @@ func Setup(e *echo.Echo) error {
 	})
 
 	root.GET("blog/card", func(c echo.Context) error {
-		params := make(map[string]string, 0)
 		QID := c.QueryParam("id")
 		var ID int
 		nextID := new(int)
@@ -158,7 +157,6 @@ func Setup(e *echo.Echo) error {
 		if err != nil {
 			return err
 		}
-		fmt.Println("ID: ", ID, params)
 		blog, err := getBlogByID(ID, blogs)
 		if err != nil {
 			return err
