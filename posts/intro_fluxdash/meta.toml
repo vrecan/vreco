@@ -1,4 +1,5 @@
 date = "2015-12-28T16:38:08-07:00"
 Categories = ["Development"]
 title = "InfluxDB Terminal Dashboards with FluxDash"
+description = "Blog post describing a command line tool written in golang for building out influxDB dashboards."
 tags  = [ "Development", "GoLang", "FluxDash", "Terminal", "InfluxDB" ]
