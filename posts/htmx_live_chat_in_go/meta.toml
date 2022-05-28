@@ -1,5 +1,5 @@
 date = "2022-05-23T08:11:18-06:00"
-Categories = ["Development"]
-Description = "HTMX live chat in go"
-Tags = ["Development", "Golang", "htmx", "echo"]
+categories = ["Development"]
+description = "My experience writing a golang HTMX live chat service using golang echo as a webserver."
+tags = ["Development", "Golang", "htmx", "echo"]
 title = "HTMX in Go"
