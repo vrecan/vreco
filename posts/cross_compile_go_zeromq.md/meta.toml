@@ -1,5 +1,5 @@
 categories = ["Development"]
-description = "Cross Compiling ZeroMQ for Golang on Windows in Centos"
+description = "Cross compiling ZeroMQ on centos 7 for windows & linux."
 date = "2015-03-02T20:29:34-07:00"
 title = "Compiling ZeroMQ for Windows in Centos 7"
 section = "post"
