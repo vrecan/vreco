@@ -1,8 +1,13 @@
-grpcurl -plaintext -d @ localhost:2020 chat.v1.ChatService/SayHello <<EOM
+grpcurl -plaintext -d @ localhost:2020 chat.v1.ChatService/SendMessage <<EOM
 {
-  "name": "Ben"
+  "msg": "Ben"
 }          
 EOM
+
+
+grpcurl -plaintext -d @ localhost:2020 chat.v1.ChatService/GetMessages <<EOM
 {
-  "message": "Hello there Ben"
+  "limit": 10,
+  "start": 0
 }
+EOM

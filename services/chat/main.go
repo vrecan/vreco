@@ -2,7 +2,6 @@ package main
 
 import (
 	"context"
-	"fmt"
 	"log"
 	"net"
 	SYS "syscall"
@@ -47,10 +46,16 @@ func main() {
 type ChatServer struct {
 }
 
-func (s *ChatServer) SayHello(ctx context.Context, req *pb.SayHelloRequest) (msg *pb.SayHelloResponse, err error) {
-	msg = &pb.SayHelloResponse{}
-	response := fmt.Sprint("Hello there ", *req.Name)
-	msg.Message = &response
+func (s *ChatServer) SendMessage(ctx context.Context, req *pb.SendMessageRequest) (msg *pb.SendMessageResponse, err error) {
+	msg = &pb.SendMessageResponse{}
+	success := true
+	msg.Success = &success
+	return msg, err
+}
+
+func (s *ChatServer) GetMessages(ctx context.Context, req *pb.GetMessagesRequest) (msg *pb.GetMessagesResponse, err error) {
+	msg = &pb.GetMessagesResponse{}
+
 	return msg, err
 }
 
