@@ -1,0 +1,15 @@
+// The greeting service definition.
+service Chat {
+  // Sends a greeting
+  rpc SayHello (HelloRequest) returns (HelloReply) {}
+}
+
+// The request message containing the user's name.
+message HelloRequest {
+  optional string name = 1;
+}
+
+// The response message containing the greetings
+message HelloReply {
+  optional string message = 1;
+}
