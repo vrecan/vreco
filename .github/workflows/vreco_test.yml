@@ -33,22 +33,24 @@ jobs:
           ~\AppData\Local\go-build
         key: ${{ runner.os }}-go-${{ matrix.go-version }}-${{ hashFiles('**/go.sum') }}
         restore-keys: |
-          ${{ runner.os }}-go-${{ matrix.go-version }}-   
+          ${{ runner.os }}-go-${{ matrix.go-version }}-
+    - name: move to vreco service directory
+      run: cd services/vreco
 
     - name: Verify dependencies vreco
-      run: cd services/vreco && go mod verify
+      run: go mod verify
 
     - name: Build
-      run: go build -v services/vreco/...
+      run: go build -v ./...
 
     - name: Run go vet
-      run: go vet services/vreco/...
+      run: go vet ./...
 
     - name: Install staticcheck
       run: go install honnef.co/go/tools/cmd/staticcheck@v0.3.2
 
     - name: Run staticcheck
-      run: staticcheck services/vreco/...
+      run: staticcheck ./...
 
     - name: Run tests
-      run: go test -race -vet=off services/vreco/...
+      run: go test -race -vet=off ./...
