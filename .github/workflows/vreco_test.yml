@@ -29,6 +29,7 @@ jobs:
         # * Build cache (Linux)
         # * Build cache (Mac)
         # * Build cache (Windows)
+        # **** MAKE SURE TO CHANGE THE KEY FOR YOUR SERVICE!!! ****
         path: |
           ~/go/pkg/mod
           ~/.cache/go-build
