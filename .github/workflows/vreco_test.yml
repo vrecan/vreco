@@ -8,7 +8,10 @@ on:
   pull_request:
     branches: [main]
     paths:
-      - 'services/vreco**/*'    
+      - 'services/vreco**/*' 
+defaults:
+ run:
+  working-directory: services/vreco        
 
 jobs:
 
@@ -31,11 +34,9 @@ jobs:
           ~/.cache/go-build
           ~/Library/Caches/go-build
           ~\AppData\Local\go-build
-        key: ${{ runner.os }}-go-${{ matrix.go-version }}-${{ hashFiles('**/go.sum') }}
+        key: ${{ runner.os }}vreco-go-${{ matrix.go-version }}-${{ hashFiles('**/go.sum') }}
         restore-keys: |
           ${{ runner.os }}-go-${{ matrix.go-version }}-
-    - name: move to vreco service directory
-      run: cd services/vreco
 
     - name: Verify dependencies vreco
       run: go mod verify
