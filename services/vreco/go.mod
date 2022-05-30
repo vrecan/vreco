@@ -13,7 +13,6 @@ require (
 	github.com/russross/blackfriday/v2 v2.1.0
 	github.com/stretchr/testify v1.7.1
 	github.com/vrecan/death/v3 v3.0.3
-	golang.org/x/example v0.0.0-20220412213650-2e68773dfca0
 )
 
 require (
