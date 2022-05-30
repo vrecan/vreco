@@ -1,15 +1,19 @@
+syntax = "proto3";
+package chat.v1;
+
+
 // The greeting service definition.
-service Chat {
+service ChatService {
   // Sends a greeting
-  rpc SayHello (HelloRequest) returns (HelloReply) {}
+  rpc SayHello (SayHelloRequest) returns (SayHelloResponse) {}
 }
 
 // The request message containing the user's name.
-message HelloRequest {
+message SayHelloRequest {
   optional string name = 1;
 }
 
 // The response message containing the greetings
-message HelloReply {
+message SayHelloResponse {
   optional string message = 1;
 }
