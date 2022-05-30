@@ -12,16 +12,13 @@ on:
 
 jobs:
 
-  audit:
-    runs-on: ubuntu-20.04
+  vreco-test:
+    runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
-
-    - name: Set up Go
-      uses: actions/setup-go@v3
+    - uses: actions/setup-go@v3
       with:
-        go-version: 1.18
-
+        go-version: 1.18.x
+    - uses: actions/checkout@v3
     - uses: actions/cache@v2
       with:
         # In order:
@@ -36,7 +33,7 @@ jobs:
           ~\AppData\Local\go-build
         key: ${{ runner.os }}-go-${{ matrix.go-version }}-${{ hashFiles('**/go.sum') }}
         restore-keys: |
-      ${{ runner.os }}-go-${{ matrix.go-version }}-    
+          ${{ runner.os }}-go-${{ matrix.go-version }}-   
 
     - name: Verify dependencies vreco
       run: cd services/vreco && go mod verify
