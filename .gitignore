@@ -1,3 +1,4 @@
 node_modules
-tmp
-vreco
+services/vreco/tmp
+services/vreco/vreco
+.git
