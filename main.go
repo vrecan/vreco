@@ -9,7 +9,7 @@ import (
 
 	"vreco/routes"
 
-	DEATH "github.com/vrecan/death"
+	DEATH "github.com/vrecan/death/v3"
 
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
