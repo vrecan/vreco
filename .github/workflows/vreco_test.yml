@@ -4,11 +4,11 @@ on:
   push:
     branches: [main]
     paths:
-      - 'services/vreco**/*'
+      - 'services/vreco/**/*'
   pull_request:
     branches: [main]
     paths:
-      - 'services/vreco**/*' 
+      - 'services/vreco/**/*' 
 defaults:
  run:
   working-directory: services/vreco        

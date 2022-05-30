@@ -3,7 +3,7 @@ on:
   push:
     branches: [main]
     paths:
-    - 'services/vreco**/*'    
+    - 'services/vreco/**/*'    
 env:
   FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
 jobs:
