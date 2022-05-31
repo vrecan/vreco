@@ -4,6 +4,7 @@ import (
 	"context"
 	"log"
 	"net"
+	"net/http"
 	SYS "syscall"
 	pb "vreco/chat/gen/chat/v1"
 
@@ -28,6 +29,14 @@ func main() {
 	pb.RegisterChatServiceServer(s, NewChatServer())
 	reflection.Register(s)
 
+	//twirp server
+	go func() {
+		twirpServer := &ChatServer{}
+		twirpHandler := pb.NewChatServiceServer(twirpServer)
+
+		http.ListenAndServe(":8080", twirpHandler)
+	}()
+	//grpc server
 	go func() {
 		lis, err := net.Listen("tcp", ":2020")
 		if err != nil {
@@ -55,7 +64,6 @@ func (s *ChatServer) SendMessage(ctx context.Context, req *pb.SendMessageRequest
 
 func (s *ChatServer) GetMessages(ctx context.Context, req *pb.GetMessagesRequest) (msg *pb.GetMessagesResponse, err error) {
 	msg = &pb.GetMessagesResponse{}
-
 	return msg, err
 }
 

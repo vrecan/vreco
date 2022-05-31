@@ -12,6 +12,7 @@ GO111MODULE=on go install \
 sudo apt-get install jq git libnss3-tools && \
 go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@v1.2 && \
 go install google.golang.org/protobuf/cmd/protoc-gen-go@v1.28 && \
+go install github.com/twitchtv/twirp/protoc-gen-twirp@v8.1.2
 ```
 
 Install mkcert
