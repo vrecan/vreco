@@ -1,4 +1,5 @@
 # Vreco monorepo
+![Tests](https://github.com/vrecan/vreco/actions/workflows/vreco_test.yml/badge.svg?branch=main)
 
 Install instructions for each service are in their independent service directories.
 
