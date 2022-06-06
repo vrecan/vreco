@@ -1,4 +1,4 @@
-module vreco/playground
+module github.com/vrecan/vreco/playground/coding_exercises
 
 go 1.18
 

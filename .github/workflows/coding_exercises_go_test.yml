@@ -1,17 +1,17 @@
-name: Playground Test
+name: Golang Coding Exercises
 
 on:
   push:
     branches: [main]
     paths:
-      - 'playground/**/*'
+      - 'playground/coding_exercises/**/*'
   pull_request:
     branches: [main]
     paths:
-      - 'playground/**/*'
+      - 'playground/coding_exercises/**/*'
 defaults:
  run:
-  working-directory: playground/   
+  working-directory: playground/coding_exercises/  
 
 jobs:
 
