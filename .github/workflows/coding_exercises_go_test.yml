@@ -1,0 +1,58 @@
+name: Golang Coding Exercises
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'playground/coding_exercises/**/*'
+  pull_request:
+    branches: [main]
+    paths:
+      - 'playground/coding_exercises/**/*'
+defaults:
+ run:
+  working-directory: playground/coding_exercises/  
+
+jobs:
+
+  playground-test:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/setup-go@v3
+      with:
+        go-version: 1.18.x
+    - uses: actions/checkout@v3
+    - uses: actions/cache@v2
+      with:
+        # In order:
+        # * Module download cache
+        # * Build cache (Linux)
+        # * Build cache (Mac)
+        # * Build cache (Windows)
+        # **** MAKE SURE TO CHANGE THE KEY FOR YOUR SERVICE!!! ****
+        path: |
+          ~/go/pkg/mod
+          ~/.cache/go-build
+          ~/Library/Caches/go-build
+          ~\AppData\Local\go-build
+        key: ${{ runner.os }}playground-go-${{ matrix.go-version }}-${{ hashFiles('**/go.sum') }}
+        restore-keys: |
+          ${{ runner.os }}-go-${{ matrix.go-version }}-
+
+    - name: Verify dependencies vreco
+      run: go mod verify
+
+    - name: Build
+      run: go build -v ./...
+
+    - name: Run go vet
+      run: go vet ./...
+
+    - name: Install staticcheck
+      run: go install honnef.co/go/tools/cmd/staticcheck@v0.3.2
+
+    - name: Run staticcheck
+      run: staticcheck ./...
+
+    - name: Run tests
+      run: go test -race -vet=off ./...
