@@ -1,4 +1,7 @@
 node_modules
 services/vreco/tmp
 services/vreco/vreco
+services/chat/chat
+tmp
 .git
+*.pem

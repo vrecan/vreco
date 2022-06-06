@@ -1,6 +1,4 @@
 # Vreco
-![deploy](https://github.com/vrecan/vreco/actions/workflows/main.yml/badge.svg?branch=main)
-![Tests](https://github.com/vrecan/vreco/actions/workflows/audit.yml/badge.svg?branch=main)
 <br>
 Main repository behind https://vreco.fly.dev.
 
