@@ -17,8 +17,16 @@
     <script src="/js/highlight.js"></script>
     <script src="/js/htmx1.7.js"></script>
        <script>
-      hljs.highlightAll();   
-      </script>
+       hljs.configure({
+       ignoreUnescapedHTML: true})
+      document.addEventListener("DOMContentLoaded", (e) => {
+        hljs.highlightAll();
+        
+      document.addEventListener("htmx:afterSwap", (e) => {
+      hljs.highlightAll();
+      });
+      });
+       </script>
       
   </head>
 
@@ -30,14 +38,14 @@
       <a href="/">
         <img class="object-scale h-18 w-32" src="/logo.svg" />
       </a>
-      <div class="w-full block flex-grow flex items-center w-auto p-2">
+      <div class="w-full flex-grow flex items-center p-2">
         <div class="text-sm lg:flex-grow">
           <a href="/blog" class="btn btn-ghost normal-case text-lg">
             Blog
           </a>
         </div>
-        <div class="block mt-4 inline-block
-          mt-0 text-grey-800 p-2">|</div>
+        <div class="block mt-4
+          text-grey-800 p-2">|</div>
         <div class="text-sm flex-grow">
           <a href="/about" class="btn btn-ghost normal-case text-lg">About Me
           </a>
