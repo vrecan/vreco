@@ -47,7 +47,6 @@ func (t *TemplateRegistry) Render(w io.Writer, name string, data interface{}, c 
 
 func markDowner(args ...interface{}) template.HTML {
 	s := blackfriday.Run([]byte(fmt.Sprintf("%s", args...)))
-	fmt.Println(string(s))
 	return template.HTML(s)
 }
 

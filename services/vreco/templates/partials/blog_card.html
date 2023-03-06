@@ -1,19 +1,17 @@
-{{define "blog_card.html"}}
-{{/* Infinite scroll blog posts */}}
+{{define "blog_card.html"}} {{/* Infinite scroll blog posts */}}
 <div class="card p-2 border bg-base-100 shadow-xl">
-  <div class="card-title"><a href="/blog/post/{{.blog.Meta.Title}}"
-    class="text-white"><h2>{{.blog.Meta.Title}}</h2></a></div>
-  <h3>Posted: {{.blog.Meta.Date | date "2006-01-02"}}</h3>
-  <div class="card-body">
-    {{.blog.Contents | markdown}}
+  <div class="card-title">
+    <a href="/blog/post/{{.blog.Meta.Title}}" class="text-white"
+      ><h2>{{.blog.Meta.Title}}</h2></a
+    >
   </div>
+  <div><h3>Posted: {{.blog.Meta.Date | date "2006-01-02"}}</h3></div>
+  <div class="card-body">{{.blog.Contents | markdown}}</div>
 </div>
 {{if .nextID}}
-<div class="py-2"
-  hx-get="/blog/card?id={{.nextID}}"
-  hx-trigger="revealed">
+<div class="py-2" hx-get="/blog/card?id={{.nextID}}" hx-trigger="revealed">
   <p alt="Result loading..." class="htmx-indicator h-60 w-60 text-center">
-    Loading more blog posts...</p>
+    Loading more blog posts...
+  </p>
 </div>
-{{end}}
-{{end}}
+{{end}} {{end}}

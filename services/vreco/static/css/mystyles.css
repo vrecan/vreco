@@ -1131,20 +1131,12 @@ menu {
   margin-top: 1rem;
 }
 
-.mt-0 {
-  margin-top: 0px;
-}
-
 .mb-2 {
   margin-bottom: 0.5rem;
 }
 
 .block {
   display: block;
-}
-
-.inline-block {
-  display: inline-block;
 }
 
 .flex {
@@ -1169,10 +1161,6 @@ menu {
 
 .w-full {
   width: 100%;
-}
-
-.w-auto {
-  width: auto;
 }
 
 .w-60 {
