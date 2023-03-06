@@ -906,25 +906,26 @@ SHELL ["/bin/bash", "-c"]
 ENV PORT 8080
 
 ENTRYPOINT [ "/app/entrypoint.sh" ]
-
 ```
-If you want to use the docker file <b>MAKE SURE TO UPDATE THE PROJECT-NAME</b>.
+
+If you want to use the docker file **MAKE SURE TO UPDATE THE PROJECT-NAME**.
 
 # Benefits & Drawbacks
 
 Overall I am pretty happy with this solution, it gives us a simple way to allow all engineers to quickly get working dev environments for every python project. Leveraging google cloud workflows and google cloud run has allowed us to move quickly and build a robust production ready data pipeline with very small teams. Anaconda is large and painful to build but with micromamba and miniconda we were able to reduce our CI times to the point of a small annoyance.
 
-**Pros:**
-- Easy to teach new devs
-- CI integration "Just Works" meaning it fades to the back and no one thinks about it
-- Devs can run it locally or in their own cloud environment quickly
-- Workflows allows us to not think about orchestration
-- Extremely low costs, we have the majority of our services set to scale to 0, this means services aren't running unless actively being used.
+### Pros:
+* Easy to teach new devs
+* CI integration "Just Works" meaning it fades to the back and no one thinks about it
+* Devs can run it locally or in their own cloud environment quickly
+* Workflows allows us to not think about orchestration
+* Extremely low costs, we have the majority of our services set to scale to 0, this means services aren't running unless actively being used.
 
-**Cons:**
-- Large docker images, generally over 1gb (Anaconda)
-- Limited to only 60 min execution time per API request
-- Tied directly to google cloud
+### Cons:
+
+* Large docker images, generally over 1gb (Anaconda)
+* Limited to only 60 min execution time per API request
+* Tied directly to google cloud
 
 
 

@@ -1,21 +1,28 @@
 @tailwind base;
 
 @layer base {
-    h1 {
-        @apply text-2xl;
-    }
+  h1 {
+    @apply text-2xl;
+  }
 
-    h2 {
-        @apply text-xl;
-    }
+  h2 {
+    @apply text-xl;
+  }
 
-    h3 {
-        @apply text-lg;
-    }
+  h3 {
+    @apply text-lg;
+  }
 
-    a {
-        @apply text-orange-600 underline;
-    }
+  a {
+    @apply text-orange-600 underline;
+  }
+}
+
+ul,
+menu {
+  list-style: inherit;
+  margin: 0;
+  padding: 0;
 }
 
 @tailwind components;

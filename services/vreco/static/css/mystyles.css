@@ -537,6 +537,13 @@ a {
   --tw-backdrop-sepia:  ;
 }
 
+ul,
+menu {
+  list-style: inherit;
+  margin: 0;
+  padding: 0;
+}
+
 .avatar.placeholder > div {
   display: flex;
   align-items: center;
