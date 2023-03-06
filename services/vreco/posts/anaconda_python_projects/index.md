@@ -10,7 +10,7 @@ We use a mono repo with a projects folder that has every service split into thei
 
 This allows us to leverage github CI workflows that only run checks based on file changes in paths.
 
-Example github workflow file
+Example github workflow file:
 
 ```yaml
 name: <project-name> Checks
@@ -170,7 +170,7 @@ options:
 We leverage pylint, pyright and pytest to test and validate all of our code in every project. 
 
 Here is our pylint config:
-```conf
+```
 [MASTER]
 
 # module doctring and function docstring
