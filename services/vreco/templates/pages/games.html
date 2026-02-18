@@ -72,12 +72,12 @@
           <button type="button" class="carousel-next btn btn-sm btn-ghost" aria-label="Next screenshot">→</button>
         </div>
       </div>
-      <div class="screenshot-carousel -mx-2 md:-mx-4" id="screenshot-carousel-{{.Slug}}">
-        {{range $i, $img := .Screenshots}}
+      <div class="screenshot-carousel -mx-2 md:-mx-4" id="screenshot-carousel-{{$game.Slug}}">
+        {{range $i, $img := $game.Screenshots}}
         <div class="screenshot-carousel-slide px-2">
           <div class="game-device-frame w-full transition-transform hover:scale-[1.02]">
             <div class="aspect-[9/16] rounded-[1rem] overflow-hidden bg-base-200">
-              <img src="{{$img}}" alt="{{$.Name}} screenshot {{add $i 1}}" class="w-full h-full object-contain pixel-art" loading="lazy" />
+              <img src="{{$img}}" alt="{{$game.Name}} screenshot {{add $i 1}}" class="w-full h-full object-contain pixel-art" loading="lazy" />
             </div>
           </div>
         </div>
@@ -87,11 +87,11 @@
     {{end}}
     {{end}}
 
-    {{if .Features}}
+    {{if $game.Features}}
     <section class="bg-base-200/30 rounded-xl p-6 md:p-8 border border-base-300/50">
       <h3 class="text-xl font-bold text-primary border-l-4 border-primary pl-4 mb-4">Features</h3>
       <ul class="space-y-3">
-        {{range .Features}}
+        {{range $game.Features}}
         <li class="flex gap-3">
           <span class="text-primary mt-1 shrink-0">•</span>
           <span class="text-base-content/90 leading-relaxed">{{.}}</span>
@@ -112,7 +112,7 @@
         </div>
       </div>
       <div class="border-t border-base-300/50 sm:border-t-0 sm:border-l sm:pl-6 pt-4 sm:pt-0 sm:ml-auto">
-        <a href="/games/{{.Slug}}" class="link link-hover text-primary font-medium">View full page →</a>
+        <a href="/games/{{$game.Slug}}" class="link link-hover text-primary font-medium">View full page →</a>
       </div>
     </section>
   </article>
