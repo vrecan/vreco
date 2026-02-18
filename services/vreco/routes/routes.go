@@ -1,11 +1,11 @@
 package routes
 
 import (
+	"bytes"
 	"errors"
 	"fmt"
 	"html/template"
 	"io"
-	"io/ioutil"
 	"net/http"
 	"os"
 	"path/filepath"
@@ -16,10 +16,10 @@ import (
 	vMiddleware "vreco/routes/middleware"
 
 	"github.com/BurntSushi/toml"
-	"github.com/Masterminds/sprig"
+	"github.com/Masterminds/sprig/v3"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
-	"github.com/russross/blackfriday/v2"
+	"github.com/yuin/goldmark"
 )
 
 var bc *broadcast.BroadCast
@@ -45,9 +45,15 @@ func (t *TemplateRegistry) Render(w io.Writer, name string, data interface{}, c 
 
 }
 
+var md = goldmark.New()
+
 func markDowner(args ...interface{}) template.HTML {
-	s := blackfriday.Run([]byte(fmt.Sprintf("%s", args...)))
-	return template.HTML(s)
+	var buf bytes.Buffer
+	src := []byte(fmt.Sprintf("%s", args...))
+	if err := md.Convert(src, &buf); err != nil {
+		return template.HTML(fmt.Sprintf("%s", args...))
+	}
+	return template.HTML(buf.Bytes())
 }
 
 func Setup(e *echo.Echo) error {
@@ -87,6 +93,7 @@ func Setup(e *echo.Echo) error {
 	templates["blog_card.html"] = template.Must(template.New("").Funcs(functionMap).ParseFiles(
 		"templates/partials/blog_card.html"))
 	templates["about.html"] = template.Must(template.New("").Funcs(functionMap).ParseFiles("templates/pages/about.html", "templates/base.html"))
+	templates["games.html"] = template.Must(template.New("").Funcs(functionMap).ParseFiles("templates/pages/games.html", "templates/base.html"))
 	templates["clicked.html"] = template.Must(template.New("").Funcs(functionMap).ParseFiles("templates/partials/clicked.html"))
 	templates["chat_msg.html"] = template.Must(template.New("").Funcs(functionMap).ParseFiles("templates/partials/chat_msg.html"))
 	templates["chat_input.html"] = template.Must(template.New("").Funcs(functionMap).ParseFiles("templates/partials/chat_input.html"))
@@ -184,6 +191,9 @@ func Setup(e *echo.Echo) error {
 	root.GET("about", func(c echo.Context) error {
 		return c.Render(http.StatusOK, "about.html", map[string]interface{}{})
 	})
+	root.GET("games", func(c echo.Context) error {
+		return c.Render(http.StatusOK, "games.html", map[string]interface{}{})
+	})
 	root.POST("clicked", func(c echo.Context) error {
 		return c.Render(http.StatusOK, "clicked.html", map[string]interface{}{})
 	})
@@ -278,14 +288,14 @@ func GenerateBlogHtml(relativePath string) (blogs Blogs, err error) {
 	}
 	blogs = make([]Blog, 0)
 	path := filepath.Join(cwd, relativePath)
-	files, err := ioutil.ReadDir(path)
+	entries, err := os.ReadDir(path)
 	if err != nil {
 		return blogs, err
 	}
 
-	for _, fileInfo := range files {
-		if fileInfo.IsDir() {
-			blog, err := readBlogFolder(filepath.Join(path, fileInfo.Name()))
+	for _, entry := range entries {
+		if entry.IsDir() {
+			blog, err := readBlogFolder(filepath.Join(path, entry.Name()))
 			if err != nil {
 				return blogs, err
 			}
@@ -326,22 +336,22 @@ func (b Blogs) Swap(i, j int) {
 }
 
 func readBlogFolder(path string) (blog Blog, err error) {
-	files, err := ioutil.ReadDir(path)
+	entries, err := os.ReadDir(path)
 	if err != nil {
 		return blog, err
 	}
 
-	for _, fileInfo := range files {
-		if fileInfo.Name() == "index.md" {
-			contents, err := readFileWithLimit(filepath.Join(path, fileInfo.Name()), 5242880)
+	for _, entry := range entries {
+		if entry.Name() == "index.md" {
+			contents, err := readFileWithLimit(filepath.Join(path, entry.Name()), 5242880)
 			if err != nil {
 				return blog, err
 			}
 			blog.Contents = contents
 		}
-		if fileInfo.Name() == "meta.toml" {
+		if entry.Name() == "meta.toml" {
 			meta := &BlogMeta{}
-			contents, err := readFileWithLimit(filepath.Join(path, fileInfo.Name()), 5242880)
+			contents, err := readFileWithLimit(filepath.Join(path, entry.Name()), 5242880)
 			if err != nil {
 				return blog, err
 			}

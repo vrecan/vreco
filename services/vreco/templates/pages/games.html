@@ -1,0 +1,51 @@
+{{define "title"}} Games {{end}} {{define "body"}}
+<div class="flex flex-col gap-6">
+  <div class="card border bg-base-100 shadow-xl">
+    <div class="card-body text-center">
+      <h1 class="text-4xl font-bold">Games</h1>
+      <p class="py-2">Games I've built</p>
+    </div>
+  </div>
+
+  <div class="card border bg-base-100 shadow-xl">
+    <div class="card-body">
+      <h2 class="card-title text-2xl">Blockening</h2>
+
+      <div class="py-4">
+        <h3 class="font-semibold text-lg">Description</h3>
+        <p class="py-2">
+          Add your game description here. What is Blockening? What's the gameplay like? What features does it have?
+        </p>
+      </div>
+
+      <div class="py-4">
+        <h3 class="font-semibold text-lg">Videos</h3>
+        <p class="py-2 text-base-content/70">
+          Trailers and gameplay videos coming soon. When ready, add YouTube embeds below:
+        </p>
+        <div class="flex flex-col gap-4 py-4">
+          <!-- Placeholder: Replace VIDEO_ID with your YouTube video ID when ready -->
+          <!-- Example: https://www.youtube.com/embed/VIDEO_ID -->
+          <div class="aspect-video max-w-2xl bg-base-200 rounded-lg flex items-center justify-center">
+            <span class="text-base-content/50">Trailer - Coming soon</span>
+          </div>
+          <div class="aspect-video max-w-2xl bg-base-200 rounded-lg flex items-center justify-center">
+            <span class="text-base-content/50">Gameplay - Coming soon</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="py-4">
+        <h3 class="font-semibold text-lg">Availability</h3>
+        <ul class="list-disc list-inside py-2 space-y-1">
+          <li>Coming soon on Android</li>
+          <li>Coming soon on iOS</li>
+        </ul>
+        <p class="py-2 text-base-content/70 text-sm">
+          App store links will be added when the game is released.
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+{{end}}
