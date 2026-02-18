@@ -8,6 +8,8 @@
 
     {{if .blog.Meta.Description}}
     <meta name="description" content="{{.blog.Meta.Description}}">
+    {{else if .game}}
+    <meta name="description" content="{{trunc 155 .game.Description}}">
     {{end}}
     <meta name=”robots” content="index, follow">
     <meta charset="UTF-8">
@@ -43,6 +45,11 @@
           <a href="/blog" class="btn btn-ghost normal-case text-lg">
             Blog
           </a>
+        </div>
+        <div class="block mt-4
+          text-grey-800 p-2">|</div>
+        <div class="text-sm flex-grow">
+          <a href="/games" class="btn btn-ghost normal-case text-lg">Games</a>
         </div>
         <div class="block mt-4
           text-grey-800 p-2">|</div>

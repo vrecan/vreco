@@ -1,11 +1,11 @@
 package routes
 
 import (
+	"bytes"
 	"errors"
 	"fmt"
 	"html/template"
 	"io"
-	"io/ioutil"
 	"net/http"
 	"os"
 	"path/filepath"
@@ -16,13 +16,56 @@ import (
 	vMiddleware "vreco/routes/middleware"
 
 	"github.com/BurntSushi/toml"
-	"github.com/Masterminds/sprig"
+	"github.com/Masterminds/sprig/v3"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
-	"github.com/russross/blackfriday/v2"
+	"github.com/yuin/goldmark"
 )
 
 var bc *broadcast.BroadCast
+
+var games = []Game{
+	{
+		Slug:        "blockening",
+		Name:        "Blockening",
+		Tagline:     "Block Blast–style puzzle game for iOS and Android",
+		Description: "Drop blocks, clear lines, chain combos. Place pre-shaped blocks on the grid—no rotation—and complete rows or columns to blast them away. The faster you clear, the bigger the bonus. Build combos, climb the leaderboards, and unlock themes as you master the grid.",
+		Features: []string{
+			"Block Blast–style puzzle: Drop blocks, clear full rows or columns, survive as long as you can",
+			"Combo system: Chain clears for massive score multipliers",
+			"Speed is king: Faster line clears = bigger time bonuses—think fast, place fast",
+			"Leaderboards: Compete for high scores and see how you stack up",
+			"Themes: Unlock and switch between visual themes as you play",
+		},
+		Availability: []string{
+			"Coming soon on Android",
+			"Coming soon on iOS",
+		},
+		Status: "Active Development",
+		Screenshots: []string{
+			"/blockening/main_menu.png",
+			"/blockening/selection.png",
+			"/blockening/explosiion.png",
+			"/blockening/med.png",
+			"/blockening/game_over.png",
+			"/blockening/leaderboard.png",
+		},
+		GameplayVideo: "/blockening/blockening_gameplay.webm",
+	},
+}
+
+type Game struct {
+	Slug          string
+	Name          string
+	Tagline       string
+	Description   string
+	Features      []string
+	Availability  []string
+	RepoURL       string
+	Status        string
+	Screenshots   []string
+	GameplayVideo string
+}
 
 // Define the template registry struct
 type TemplateRegistry struct {
@@ -45,9 +88,15 @@ func (t *TemplateRegistry) Render(w io.Writer, name string, data interface{}, c 
 
 }
 
+var md = goldmark.New()
+
 func markDowner(args ...interface{}) template.HTML {
-	s := blackfriday.Run([]byte(fmt.Sprintf("%s", args...)))
-	return template.HTML(s)
+	var buf bytes.Buffer
+	src := []byte(fmt.Sprintf("%s", args...))
+	if err := md.Convert(src, &buf); err != nil {
+		return template.HTML(fmt.Sprintf("%s", args...))
+	}
+	return template.HTML(buf.Bytes())
 }
 
 func Setup(e *echo.Echo) error {
@@ -87,6 +136,8 @@ func Setup(e *echo.Echo) error {
 	templates["blog_card.html"] = template.Must(template.New("").Funcs(functionMap).ParseFiles(
 		"templates/partials/blog_card.html"))
 	templates["about.html"] = template.Must(template.New("").Funcs(functionMap).ParseFiles("templates/pages/about.html", "templates/base.html"))
+	templates["games.html"] = template.Must(template.New("").Funcs(functionMap).ParseFiles("templates/pages/games.html", "templates/base.html"))
+	templates["game.html"] = template.Must(template.New("").Funcs(functionMap).ParseFiles("templates/pages/game.html", "templates/base.html"))
 	templates["clicked.html"] = template.Must(template.New("").Funcs(functionMap).ParseFiles("templates/partials/clicked.html"))
 	templates["chat_msg.html"] = template.Must(template.New("").Funcs(functionMap).ParseFiles("templates/partials/chat_msg.html"))
 	templates["chat_input.html"] = template.Must(template.New("").Funcs(functionMap).ParseFiles("templates/partials/chat_input.html"))
@@ -184,6 +235,21 @@ func Setup(e *echo.Echo) error {
 	root.GET("about", func(c echo.Context) error {
 		return c.Render(http.StatusOK, "about.html", map[string]interface{}{})
 	})
+	root.GET("games", func(c echo.Context) error {
+		return c.Render(http.StatusOK, "games.html", map[string]interface{}{
+			"games": games,
+		})
+	})
+	root.GET("games/:slug", func(c echo.Context) error {
+		slug := c.Param("slug")
+		game, err := getGameBySlug(slug, games)
+		if err != nil {
+			return c.Render(http.StatusNotFound, "404.html", map[string]interface{}{})
+		}
+		return c.Render(http.StatusOK, "game.html", map[string]interface{}{
+			"game": game,
+		})
+	})
 	root.POST("clicked", func(c echo.Context) error {
 		return c.Render(http.StatusOK, "clicked.html", map[string]interface{}{})
 	})
@@ -213,6 +279,15 @@ func SetupStaticAssets(e *echo.Echo) {
 		Root:   "static",
 		Browse: false,
 	}))
+}
+
+func getGameBySlug(slug string, gameList []Game) (*Game, error) {
+	for i := range gameList {
+		if gameList[i].Slug == slug {
+			return &gameList[i], nil
+		}
+	}
+	return nil, fmt.Errorf("game not found")
 }
 
 func getBlogByName(name string, blogs Blogs) (blog *Blog, err error) {
@@ -278,14 +353,14 @@ func GenerateBlogHtml(relativePath string) (blogs Blogs, err error) {
 	}
 	blogs = make([]Blog, 0)
 	path := filepath.Join(cwd, relativePath)
-	files, err := ioutil.ReadDir(path)
+	entries, err := os.ReadDir(path)
 	if err != nil {
 		return blogs, err
 	}
 
-	for _, fileInfo := range files {
-		if fileInfo.IsDir() {
-			blog, err := readBlogFolder(filepath.Join(path, fileInfo.Name()))
+	for _, entry := range entries {
+		if entry.IsDir() {
+			blog, err := readBlogFolder(filepath.Join(path, entry.Name()))
 			if err != nil {
 				return blogs, err
 			}
@@ -326,22 +401,22 @@ func (b Blogs) Swap(i, j int) {
 }
 
 func readBlogFolder(path string) (blog Blog, err error) {
-	files, err := ioutil.ReadDir(path)
+	entries, err := os.ReadDir(path)
 	if err != nil {
 		return blog, err
 	}
 
-	for _, fileInfo := range files {
-		if fileInfo.Name() == "index.md" {
-			contents, err := readFileWithLimit(filepath.Join(path, fileInfo.Name()), 5242880)
+	for _, entry := range entries {
+		if entry.Name() == "index.md" {
+			contents, err := readFileWithLimit(filepath.Join(path, entry.Name()), 5242880)
 			if err != nil {
 				return blog, err
 			}
 			blog.Contents = contents
 		}
-		if fileInfo.Name() == "meta.toml" {
+		if entry.Name() == "meta.toml" {
 			meta := &BlogMeta{}
-			contents, err := readFileWithLimit(filepath.Join(path, fileInfo.Name()), 5242880)
+			contents, err := readFileWithLimit(filepath.Join(path, entry.Name()), 5242880)
 			if err != nil {
 				return blog, err
 			}

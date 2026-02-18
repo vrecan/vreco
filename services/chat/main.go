@@ -8,7 +8,6 @@ import (
 	SYS "syscall"
 	pb "vreco/chat/gen/chat/v1"
 
-	middleware "github.com/grpc-ecosystem/go-grpc-middleware"
 	"github.com/grpc-ecosystem/go-grpc-middleware/v2/interceptors/recovery"
 	DEATH "github.com/vrecan/death/v3"
 	"google.golang.org/grpc"
@@ -19,12 +18,8 @@ func main() {
 	death := DEATH.NewDeath(SYS.SIGINT, SYS.SIGTERM)
 
 	s := grpc.NewServer(
-		grpc.StreamInterceptor(middleware.ChainStreamServer(
-			recovery.StreamServerInterceptor(),
-		)),
-		grpc.UnaryInterceptor(middleware.ChainUnaryServer(
-			recovery.UnaryServerInterceptor(),
-		)),
+		grpc.ChainStreamInterceptor(recovery.StreamServerInterceptor()),
+		grpc.ChainUnaryInterceptor(recovery.UnaryServerInterceptor()),
 	)
 	pb.RegisterChatServiceServer(s, NewChatServer())
 	reflection.Register(s)
