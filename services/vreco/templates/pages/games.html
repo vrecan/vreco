@@ -7,14 +7,17 @@
     </div>
   </div>
 
+  {{range .games}}
   <div class="card border bg-base-100 shadow-xl">
     <div class="card-body">
-      <h2 class="card-title text-2xl">Blockening</h2>
+      <h2 class="card-title text-2xl">
+        <a href="/games/{{.Slug}}" class="link link-hover">{{.Name}}</a>
+      </h2>
 
       <div class="py-4">
         <h3 class="font-semibold text-lg">Description</h3>
         <p class="py-2">
-          Add your game description here. What is Blockening? What's the gameplay like? What features does it have?
+          {{.Description}}
         </p>
       </div>
 
@@ -24,8 +27,6 @@
           Trailers and gameplay videos coming soon. When ready, add YouTube embeds below:
         </p>
         <div class="flex flex-col gap-4 py-4">
-          <!-- Placeholder: Replace VIDEO_ID with your YouTube video ID when ready -->
-          <!-- Example: https://www.youtube.com/embed/VIDEO_ID -->
           <div class="aspect-video max-w-2xl bg-base-200 rounded-lg flex items-center justify-center">
             <span class="text-base-content/50">Trailer - Coming soon</span>
           </div>
@@ -38,8 +39,9 @@
       <div class="py-4">
         <h3 class="font-semibold text-lg">Availability</h3>
         <ul class="list-disc list-inside py-2 space-y-1">
-          <li>Coming soon on Android</li>
-          <li>Coming soon on iOS</li>
+          {{range .Availability}}
+          <li>{{.}}</li>
+          {{end}}
         </ul>
         <p class="py-2 text-base-content/70 text-sm">
           App store links will be added when the game is released.
@@ -47,5 +49,6 @@
       </div>
     </div>
   </div>
+  {{end}}
 </div>
 {{end}}

@@ -24,6 +24,25 @@ import (
 
 var bc *broadcast.BroadCast
 
+var games = []Game{
+	{
+		Slug:        "blockening",
+		Name:        "Blockening",
+		Description: "Add your game description here. What is Blockening? What's the gameplay like? What features does it have?",
+		Availability: []string{
+			"Coming soon on Android",
+			"Coming soon on iOS",
+		},
+	},
+}
+
+type Game struct {
+	Slug         string
+	Name         string
+	Description  string
+	Availability []string
+}
+
 // Define the template registry struct
 type TemplateRegistry struct {
 	templates map[string]*template.Template
@@ -94,6 +113,7 @@ func Setup(e *echo.Echo) error {
 		"templates/partials/blog_card.html"))
 	templates["about.html"] = template.Must(template.New("").Funcs(functionMap).ParseFiles("templates/pages/about.html", "templates/base.html"))
 	templates["games.html"] = template.Must(template.New("").Funcs(functionMap).ParseFiles("templates/pages/games.html", "templates/base.html"))
+	templates["game.html"] = template.Must(template.New("").Funcs(functionMap).ParseFiles("templates/pages/game.html", "templates/base.html"))
 	templates["clicked.html"] = template.Must(template.New("").Funcs(functionMap).ParseFiles("templates/partials/clicked.html"))
 	templates["chat_msg.html"] = template.Must(template.New("").Funcs(functionMap).ParseFiles("templates/partials/chat_msg.html"))
 	templates["chat_input.html"] = template.Must(template.New("").Funcs(functionMap).ParseFiles("templates/partials/chat_input.html"))
@@ -192,7 +212,19 @@ func Setup(e *echo.Echo) error {
 		return c.Render(http.StatusOK, "about.html", map[string]interface{}{})
 	})
 	root.GET("games", func(c echo.Context) error {
-		return c.Render(http.StatusOK, "games.html", map[string]interface{}{})
+		return c.Render(http.StatusOK, "games.html", map[string]interface{}{
+			"games": games,
+		})
+	})
+	root.GET("games/:slug", func(c echo.Context) error {
+		slug := c.Param("slug")
+		game, err := getGameBySlug(slug, games)
+		if err != nil {
+			return c.Render(http.StatusNotFound, "404.html", map[string]interface{}{})
+		}
+		return c.Render(http.StatusOK, "game.html", map[string]interface{}{
+			"game": game,
+		})
 	})
 	root.POST("clicked", func(c echo.Context) error {
 		return c.Render(http.StatusOK, "clicked.html", map[string]interface{}{})
@@ -223,6 +255,15 @@ func SetupStaticAssets(e *echo.Echo) {
 		Root:   "static",
 		Browse: false,
 	}))
+}
+
+func getGameBySlug(slug string, gameList []Game) (*Game, error) {
+	for i := range gameList {
+		if gameList[i].Slug == slug {
+			return &gameList[i], nil
+		}
+	}
+	return nil, fmt.Errorf("game not found")
 }
 
 func getBlogByName(name string, blogs Blogs) (blog *Blog, err error) {
