@@ -8,6 +8,8 @@
 
     {{if .blog.Meta.Description}}
     <meta name="description" content="{{.blog.Meta.Description}}">
+    {{else if .game}}
+    <meta name="description" content="{{trunc 155 .game.Description}}">
     {{end}}
     <meta name=”robots” content="index, follow">
     <meta charset="UTF-8">

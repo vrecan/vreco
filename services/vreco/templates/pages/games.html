@@ -1,54 +1,40 @@
 {{define "title"}} Games {{end}} {{define "body"}}
-<div class="flex flex-col gap-6">
-  <div class="card border bg-base-100 shadow-xl">
-    <div class="card-body text-center">
-      <h1 class="text-4xl font-bold">Games</h1>
-      <p class="py-2">Games I've built</p>
-    </div>
+<div class="flex flex-col gap-8">
+  <div class="text-center">
+    <h1 class="text-4xl md:text-5xl font-bold">Games I've Built</h1>
+    <p class="py-4 text-lg text-base-content/80 max-w-2xl mx-auto">
+      Indie games built with Godot. Strategic puzzles, polished mechanics, and mobile-first design.
+    </p>
   </div>
 
-  {{range .games}}
-  <div class="card border bg-base-100 shadow-xl">
-    <div class="card-body">
-      <h2 class="card-title text-2xl">
-        <a href="/games/{{.Slug}}" class="link link-hover">{{.Name}}</a>
-      </h2>
-
-      <div class="py-4">
-        <h3 class="font-semibold text-lg">Description</h3>
-        <p class="py-2">
-          {{.Description}}
-        </p>
-      </div>
-
-      <div class="py-4">
-        <h3 class="font-semibold text-lg">Videos</h3>
-        <p class="py-2 text-base-content/70">
-          Trailers and gameplay videos coming soon. When ready, add YouTube embeds below:
-        </p>
-        <div class="flex flex-col gap-4 py-4">
-          <div class="aspect-video max-w-2xl bg-base-200 rounded-lg flex items-center justify-center">
-            <span class="text-base-content/50">Trailer - Coming soon</span>
-          </div>
-          <div class="aspect-video max-w-2xl bg-base-200 rounded-lg flex items-center justify-center">
-            <span class="text-base-content/50">Gameplay - Coming soon</span>
-          </div>
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    {{range .games}}
+    <a href="/games/{{.Slug}}" class="card border bg-base-100 shadow-xl hover:shadow-2xl transition-shadow overflow-hidden">
+      {{if .Screenshots}}
+      <figure class="flex justify-center overflow-hidden bg-base-200 py-4">
+        <div class="w-full max-w-game-preview aspect-[9/16] overflow-hidden">
+          <img src="{{index .Screenshots 0}}" alt="{{.Name}}" class="w-full h-full object-contain pixel-art" />
+        </div>
+      </figure>
+      {{end}}
+      <div class="card-body">
+        <h2 class="card-title text-xl">{{.Name}}</h2>
+        {{if .Tagline}}
+        <p class="text-sm text-base-content/70 line-clamp-2">{{.Tagline}}</p>
+        {{else}}
+        <p class="text-sm text-base-content/70 line-clamp-2">{{.Description}}</p>
+        {{end}}
+        <div class="flex flex-wrap gap-2 mt-2">
+          {{range .Availability}}
+          <span class="badge badge-outline badge-sm">{{.}}</span>
+          {{end}}
+          {{if .Status}}
+          <span class="badge badge-primary badge-sm">{{.Status}}</span>
+          {{end}}
         </div>
       </div>
-
-      <div class="py-4">
-        <h3 class="font-semibold text-lg">Availability</h3>
-        <ul class="list-disc list-inside py-2 space-y-1">
-          {{range .Availability}}
-          <li>{{.}}</li>
-          {{end}}
-        </ul>
-        <p class="py-2 text-base-content/70 text-sm">
-          App store links will be added when the game is released.
-        </p>
-      </div>
-    </div>
+    </a>
+    {{end}}
   </div>
-  {{end}}
 </div>
 {{end}}

@@ -28,19 +28,43 @@ var games = []Game{
 	{
 		Slug:        "blockening",
 		Name:        "Blockening",
-		Description: "Add your game description here. What is Blockening? What's the gameplay like? What features does it have?",
+		Tagline:     "Strategic block blast puzzle game for iOS and Android",
+		Description: "Place pre-shaped blocks on a grid (no rotation), complete rows or columns to clear them, and achieve high scores. The game ends when no more blocks can be placed. Think ahead and optimize your placement strategies as difficulty increases! Built with a hybrid 2D/3D architecture for optimal mobile performance and polished visuals.",
+		Features: []string{
+			"Adaptive difficulty: Easy (0–15k), Medium (15k–30k), and Hard (30k+) tiers that change block selection and placement strategy",
+			"2D/3D hybrid: Core grid in 2D for performance, 3D effects for block previews and visual polish",
+			"Between-round announcements: Difficulty tier changes only between rounds—no mid-drag surprises",
+			"Smart initial board: Lightly pre-filled (up to 30%) to avoid an empty opening without overwhelming new players",
+			"Godot 4.x: Built with modern engine, GDScript, iOS 7+, Android API 14+",
+		},
 		Availability: []string{
 			"Coming soon on Android",
 			"Coming soon on iOS",
 		},
+		Status: "Active Development",
+		Screenshots: []string{
+			"/blockening/main_menu.png",
+			"/blockening/selection.png",
+			"/blockening/explosiion.png",
+			"/blockening/med.png",
+			"/blockening/game_over.png",
+			"/blockening/leaderboard.png",
+		},
+		GameplayVideo: "/blockening/blockening_gameplay.webm",
 	},
 }
 
 type Game struct {
-	Slug         string
-	Name         string
-	Description  string
-	Availability []string
+	Slug          string
+	Name          string
+	Tagline       string
+	Description   string
+	Features      []string
+	Availability  []string
+	RepoURL       string
+	Status        string
+	Screenshots   []string
+	GameplayVideo string
 }
 
 // Define the template registry struct
