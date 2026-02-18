@@ -1,5 +1,5 @@
 {{define "title"}} Games {{end}} {{define "body"}}
-<div class="flex flex-col gap-12 px-4 py-8 max-w-5xl mx-auto w-full">
+<div class="flex flex-col gap-16 px-4 py-8 max-w-5xl mx-auto w-full lg:max-w-6xl">
   <header class="text-center space-y-4">
     <h1 class="text-4xl md:text-5xl font-bold tracking-tight">Games I've Built</h1>
     <p class="text-lg text-base-content/80 max-w-2xl mx-auto leading-relaxed">
@@ -7,36 +7,138 @@
     </p>
   </header>
 
-  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 w-full">
-    {{range .games}}
-    <a href="/games/{{.Slug}}" class="group card border border-base-300/50 bg-base-100 shadow-lg hover:shadow-xl hover:border-primary/30 transition-all duration-300 overflow-hidden">
-      {{if .Screenshots}}
-      <figure class="flex justify-center p-4 pt-6">
-        <div class="game-device-frame w-fit mx-auto">
-          <div class="w-[14rem] aspect-[9/16] overflow-hidden rounded-xl">
-            <img src="{{index .Screenshots 0}}" alt="{{.Name}}" class="w-full h-full object-contain pixel-art" />
-          </div>
-        </div>
-      </figure>
-      {{end}}
-      <div class="card-body pt-0">
-        <h2 class="card-title text-xl text-primary group-hover:text-primary">{{.Name}}</h2>
-        {{if .Tagline}}
-        <p class="text-sm text-base-content/70 line-clamp-2">{{.Tagline}}</p>
-        {{else}}
-        <p class="text-sm text-base-content/70 line-clamp-2">{{.Description}}</p>
-        {{end}}
-        <div class="flex flex-wrap gap-2 mt-2">
-          {{range .Availability}}
-          <span class="badge badge-outline badge-sm">{{.}}</span>
-          {{end}}
-          {{if .Status}}
-          <span class="badge badge-primary badge-sm">{{.Status}}</span>
+  {{range $game := .games}}
+  <article class="flex flex-col gap-12" id="game-{{$game.Slug}}">
+    {{if or $game.GameplayVideo $game.Screenshots}}
+    <div class="flex flex-col lg:flex-row lg:items-center lg:gap-12 lg:justify-between">
+      <div class="game-device-frame w-full max-w-game-preview lg:max-w-game-preview mx-auto shrink-0">
+        <div class="aspect-[9/16] rounded-[1rem] overflow-hidden bg-base-200">
+          {{if $game.GameplayVideo}}
+          <video class="w-full h-full object-contain pixel-art" controls playsinline preload="metadata">
+            <source src="{{$game.GameplayVideo}}" type="video/webm" />
+            Your browser does not support the video tag.
+          </video>
+          {{else}}
+          <img src="{{index $game.Screenshots 0}}" alt="{{$game.Name}} - {{$game.Tagline}}" class="w-full h-full object-contain pixel-art" />
           {{end}}
         </div>
       </div>
-    </a>
+      <div class="text-center lg:text-left mt-8 lg:mt-0 lg:flex-1 lg:max-w-xl">
+        <h2 class="text-4xl md:text-5xl font-extrabold text-primary tracking-tight">{{$game.Name}}</h2>
+        {{if $game.Tagline}}
+        <p class="text-lg text-base-content/80 font-medium mt-3">{{$game.Tagline}}</p>
+        {{end}}
+        <div class="flex flex-wrap justify-center lg:justify-start gap-2 mt-5">
+          {{range $game.Availability}}
+          <span class="badge badge-outline badge-sm">{{.}}</span>
+          {{end}}
+          {{if $game.Status}}
+          <span class="badge badge-primary badge-sm">{{$game.Status}}</span>
+          {{end}}
+        </div>
+        <a href="/games/{{$game.Slug}}" class="link link-hover text-primary mt-4 inline-block text-sm font-medium">View full page →</a>
+      </div>
+    </div>
+    {{else}}
+    <div class="text-center">
+      <h2 class="text-4xl md:text-5xl font-extrabold text-primary">{{$game.Name}}</h2>
+      {{if $game.Tagline}}
+      <p class="text-lg text-base-content/80 mt-3">{{$game.Tagline}}</p>
+      {{end}}
+      <div class="flex flex-wrap justify-center gap-2 mt-5">
+        {{range $game.Availability}}
+        <span class="badge badge-outline badge-sm">{{.}}</span>
+        {{end}}
+        {{if $game.Status}}
+        <span class="badge badge-primary badge-sm">{{$game.Status}}</span>
+        {{end}}
+      </div>
+    </div>
     {{end}}
-  </div>
+
+    <section class="bg-base-200/30 rounded-xl p-6 md:p-8 border border-base-300/50">
+      <h3 class="text-xl font-bold text-primary border-l-4 border-primary pl-4 mb-4">Overview</h3>
+      <p class="text-base-content/90 leading-relaxed">{{$game.Description}}</p>
+    </section>
+
+    {{if $game.Screenshots}}
+    {{if gt (len $game.Screenshots) 1}}
+    <section class="bg-base-200/30 rounded-xl p-6 md:p-8 border border-base-300/50">
+      <h3 class="text-xl font-bold text-primary border-l-4 border-primary pl-4 mb-4">Screenshots</h3>
+      <div class="flex items-center gap-4 mb-4">
+        <p class="text-base-content/70 text-sm">Swipe or use arrows to explore</p>
+        <div class="flex gap-2 ml-auto">
+          <button type="button" class="carousel-prev btn btn-sm btn-ghost" aria-label="Previous screenshot">←</button>
+          <button type="button" class="carousel-next btn btn-sm btn-ghost" aria-label="Next screenshot">→</button>
+        </div>
+      </div>
+      <div class="screenshot-carousel -mx-2 md:-mx-4" id="screenshot-carousel-{{.Slug}}">
+        {{range $i, $img := .Screenshots}}
+        <div class="screenshot-carousel-slide px-2">
+          <div class="game-device-frame w-full transition-transform hover:scale-[1.02]">
+            <div class="aspect-[9/16] rounded-[1rem] overflow-hidden bg-base-200">
+              <img src="{{$img}}" alt="{{$.Name}} screenshot {{add $i 1}}" class="w-full h-full object-contain pixel-art" loading="lazy" />
+            </div>
+          </div>
+        </div>
+        {{end}}
+      </div>
+    </section>
+    {{end}}
+    {{end}}
+
+    {{if .Features}}
+    <section class="bg-base-200/30 rounded-xl p-6 md:p-8 border border-base-300/50">
+      <h3 class="text-xl font-bold text-primary border-l-4 border-primary pl-4 mb-4">Features</h3>
+      <ul class="space-y-3">
+        {{range .Features}}
+        <li class="flex gap-3">
+          <span class="text-primary mt-1 shrink-0">•</span>
+          <span class="text-base-content/90 leading-relaxed">{{.}}</span>
+        </li>
+        {{end}}
+      </ul>
+    </section>
+    {{end}}
+
+    <section class="flex flex-col sm:flex-row sm:items-center gap-4 p-6 rounded-xl bg-base-200/50 border border-base-300/50">
+      <div>
+        <h3 class="text-lg font-bold text-primary mb-3">Tech Stack</h3>
+        <div class="flex flex-wrap gap-2">
+          <span class="badge badge-ghost badge-sm">Godot 4.x</span>
+          <span class="badge badge-ghost badge-sm">GDScript</span>
+          <span class="badge badge-ghost badge-sm">iOS 7+</span>
+          <span class="badge badge-ghost badge-sm">Android API 14+</span>
+        </div>
+      </div>
+      <div class="border-t border-base-300/50 sm:border-t-0 sm:border-l sm:pl-6 pt-4 sm:pt-0 sm:ml-auto">
+        <a href="/games/{{.Slug}}" class="link link-hover text-primary font-medium">View full page →</a>
+      </div>
+    </section>
+  </article>
+  {{end}}
 </div>
+
+<script>
+(function() {
+  document.querySelectorAll('.screenshot-carousel').forEach(function(carousel) {
+    var slides = carousel.querySelectorAll('.screenshot-carousel-slide');
+    var section = carousel.closest('section');
+    if (!section) return;
+    var prevBtn = section.querySelector('.carousel-prev');
+    var nextBtn = section.querySelector('.carousel-next');
+    function getScrollAmount() {
+      if (!slides[0]) return 280;
+      var gap = parseFloat(getComputedStyle(carousel).gap) || 24;
+      return slides[0].offsetWidth + gap;
+    }
+    if (prevBtn) prevBtn.addEventListener('click', function() {
+      carousel.scrollBy({ left: -getScrollAmount(), behavior: 'smooth' });
+    });
+    if (nextBtn) nextBtn.addEventListener('click', function() {
+      carousel.scrollBy({ left: getScrollAmount(), behavior: 'smooth' });
+    });
+  });
+})();
+</script>
 {{end}}
