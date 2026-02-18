@@ -1,24 +1,26 @@
 {{define "title"}} Games {{end}} {{define "body"}}
-<div class="flex flex-col gap-8">
-  <div class="text-center">
-    <h1 class="text-4xl md:text-5xl font-bold">Games I've Built</h1>
-    <p class="py-4 text-lg text-base-content/80 max-w-2xl mx-auto">
+<div class="flex flex-col gap-12 px-4 py-8 max-w-5xl mx-auto w-full">
+  <header class="text-center space-y-4">
+    <h1 class="text-4xl md:text-5xl font-bold tracking-tight">Games I've Built</h1>
+    <p class="text-lg text-base-content/80 max-w-2xl mx-auto leading-relaxed">
       Indie games built with Godot. Strategic puzzles, polished mechanics, and mobile-first design.
     </p>
-  </div>
+  </header>
 
-  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 w-full">
     {{range .games}}
-    <a href="/games/{{.Slug}}" class="card border bg-base-100 shadow-xl hover:shadow-2xl transition-shadow overflow-hidden">
+    <a href="/games/{{.Slug}}" class="group card border border-base-300/50 bg-base-100 shadow-lg hover:shadow-xl hover:border-primary/30 transition-all duration-300 overflow-hidden">
       {{if .Screenshots}}
-      <figure class="flex justify-center overflow-hidden bg-base-200 py-4">
-        <div class="w-full max-w-game-preview aspect-[9/16] overflow-hidden">
-          <img src="{{index .Screenshots 0}}" alt="{{.Name}}" class="w-full h-full object-contain pixel-art" />
+      <figure class="flex justify-center p-4 pt-6">
+        <div class="game-device-frame w-fit mx-auto">
+          <div class="w-[14rem] aspect-[9/16] overflow-hidden rounded-xl">
+            <img src="{{index .Screenshots 0}}" alt="{{.Name}}" class="w-full h-full object-contain pixel-art" />
+          </div>
         </div>
       </figure>
       {{end}}
-      <div class="card-body">
-        <h2 class="card-title text-xl">{{.Name}}</h2>
+      <div class="card-body pt-0">
+        <h2 class="card-title text-xl text-primary group-hover:text-primary">{{.Name}}</h2>
         {{if .Tagline}}
         <p class="text-sm text-base-content/70 line-clamp-2">{{.Tagline}}</p>
         {{else}}

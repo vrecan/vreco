@@ -28,14 +28,14 @@ var games = []Game{
 	{
 		Slug:        "blockening",
 		Name:        "Blockening",
-		Tagline:     "Strategic block blast puzzle game for iOS and Android",
-		Description: "Place pre-shaped blocks on a grid (no rotation), complete rows or columns to clear them, and achieve high scores. The game ends when no more blocks can be placed. Think ahead and optimize your placement strategies as difficulty increases! Built with a hybrid 2D/3D architecture for optimal mobile performance and polished visuals.",
+		Tagline:     "Block Blast–style puzzle game for iOS and Android",
+		Description: "Drop blocks, clear lines, chain combos. Place pre-shaped blocks on the grid—no rotation—and complete rows or columns to blast them away. The faster you clear, the bigger the bonus. Build combos, climb the leaderboards, and unlock themes as you master the grid.",
 		Features: []string{
-			"Adaptive difficulty: Easy (0–15k), Medium (15k–30k), and Hard (30k+) tiers that change block selection and placement strategy",
-			"2D/3D hybrid: Core grid in 2D for performance, 3D effects for block previews and visual polish",
-			"Between-round announcements: Difficulty tier changes only between rounds—no mid-drag surprises",
-			"Smart initial board: Lightly pre-filled (up to 30%) to avoid an empty opening without overwhelming new players",
-			"Godot 4.x: Built with modern engine, GDScript, iOS 7+, Android API 14+",
+			"Block Blast–style puzzle: Drop blocks, clear full rows or columns, survive as long as you can",
+			"Combo system: Chain clears for massive score multipliers",
+			"Speed is king: Faster line clears = bigger time bonuses—think fast, place fast",
+			"Leaderboards: Compete for high scores and see how you stack up",
+			"Themes: Unlock and switch between visual themes as you play",
 		},
 		Availability: []string{
 			"Coming soon on Android",

@@ -1,12 +1,19 @@
 {{define "title"}} {{.game.Name}} - {{.game.Tagline}} {{end}} {{define "body"}}
-<div class="flex flex-col max-w-5xl mx-auto lg:max-w-6xl">
+<div class="flex flex-col max-w-5xl mx-auto lg:max-w-6xl px-4 sm:px-6 md:px-8">
   <a href="/games" class="link link-hover text-xs text-base-content/60 hover:text-primary transition-colors w-fit mb-6">← Back to Games</a>
 
-  {{if .game.Screenshots}}
+  {{if or .game.GameplayVideo .game.Screenshots}}
   <div class="flex flex-col lg:flex-row lg:items-center lg:gap-12 lg:justify-between mb-16">
     <div class="game-device-frame w-full max-w-game-preview lg:max-w-game-preview mx-auto shrink-0">
       <div class="aspect-[9/16] rounded-[1rem] overflow-hidden bg-base-200">
+        {{if .game.GameplayVideo}}
+        <video class="w-full h-full object-contain pixel-art" controls playsinline preload="metadata">
+          <source src="{{.game.GameplayVideo}}" type="video/webm" />
+          Your browser does not support the video tag.
+        </video>
+        {{else}}
         <img src="{{index .game.Screenshots 0}}" alt="{{.game.Name}} - {{.game.Tagline}}" class="w-full h-full object-contain pixel-art" />
+        {{end}}
       </div>
     </div>
     <div class="text-center lg:text-left mt-8 lg:mt-0 lg:flex-1 lg:max-w-xl">
@@ -45,31 +52,16 @@
   </div>
   {{end}}
 
-  <div class="w-full space-y-16">
-    <section class="bg-base-200/30 rounded-xl p-6 md:p-8 border border-base-300/50">
+  <div class="w-full space-y-16 -mx-4 sm:-mx-6 md:-mx-8">
+    <section class="bg-base-200/30 rounded-none sm:rounded-xl p-4 sm:p-6 md:p-8 border-y border-base-300/50 sm:border sm:border-base-300/50">
       <h2 class="text-xl md:text-2xl font-bold text-primary border-l-4 border-primary pl-4 mb-4">Overview</h2>
       <p class="text-base-content/90 leading-relaxed text-lg">{{.game.Description}}</p>
     </section>
 
-    {{if .game.GameplayVideo}}
-    <section class="bg-base-200/30 rounded-xl p-6 md:p-8 border border-base-300/50">
-      <h2 class="text-xl md:text-2xl font-bold text-primary border-l-4 border-primary pl-4 mb-4">Gameplay</h2>
-      <div class="flex justify-center">
-        <div class="game-device-frame w-full max-w-game-preview lg:max-w-game-preview">
-          <div class="aspect-[9/16] rounded-[1rem] overflow-hidden bg-base-200">
-            <video class="w-full h-full object-contain pixel-art" controls playsinline preload="metadata">
-              <source src="{{.game.GameplayVideo}}" type="video/webm" />
-              Your browser does not support the video tag.
-            </video>
-          </div>
-        </div>
-      </div>
-    </section>
-    {{end}}
 
     {{if .game.Screenshots}}
     {{if gt (len .game.Screenshots) 1}}
-    <section class="bg-base-200/30 rounded-xl p-6 md:p-8 border border-base-300/50">
+    <section class="bg-base-200/30 rounded-none sm:rounded-xl p-4 sm:p-6 md:p-8 border-y border-base-300/50 sm:border sm:border-base-300/50">
       <h2 class="text-xl md:text-2xl font-bold text-primary border-l-4 border-primary pl-4 mb-4">Screenshots</h2>
       <div class="flex items-center gap-4 mb-4">
         <p class="text-base-content/70 text-sm">Swipe or use arrows to explore</p>
@@ -78,7 +70,7 @@
           <button type="button" class="carousel-next btn btn-sm btn-ghost" aria-label="Next screenshot">→</button>
         </div>
       </div>
-      <div class="screenshot-carousel -mx-2 md:-mx-4" id="screenshot-carousel">
+      <div class="screenshot-carousel -mx-4 sm:mx-0 sm:-mx-2 md:-mx-4" id="screenshot-carousel">
         {{range $i, $img := .game.Screenshots}}
         <div class="screenshot-carousel-slide px-2">
           <div class="game-device-frame w-full transition-transform hover:scale-[1.02]">
@@ -116,7 +108,7 @@
     {{end}}
 
     {{if .game.Features}}
-    <section class="bg-base-200/30 rounded-xl p-6 md:p-8 border border-base-300/50">
+    <section class="bg-base-200/30 rounded-none sm:rounded-xl p-4 sm:p-6 md:p-8 border-y border-base-300/50 sm:border sm:border-base-300/50">
       <h2 class="text-xl md:text-2xl font-bold text-primary border-l-4 border-primary pl-4 mb-4">Features</h2>
       <ul class="space-y-3">
         {{range .game.Features}}
@@ -129,7 +121,7 @@
     </section>
     {{end}}
 
-    <section class="flex flex-col sm:flex-row sm:items-center gap-4 p-6 rounded-xl bg-base-200/50 border border-base-300/50">
+    <section class="flex flex-col sm:flex-row sm:items-center gap-4 p-4 sm:p-6 rounded-none sm:rounded-xl bg-base-200/50 border-y border-base-300/50 sm:border sm:border-base-300/50">
       <div>
         <h2 class="text-xl font-bold text-primary mb-3">Tech Stack</h2>
         <div class="flex flex-wrap gap-2">

@@ -1226,6 +1226,15 @@ menu {
   border-width: 1px;
 }
 
+.border-y {
+  border-top-width: 1px;
+  border-bottom-width: 1px;
+}
+
+.rounded-none {
+  border-radius: 0;
+}
+
 .border-2 {
   border-width: 2px;
 }
@@ -1246,6 +1255,20 @@ menu {
 
 .p-2 {
   padding: 0.5rem;
+}
+
+.p-4 {
+  padding: 1rem;
+}
+
+.px-4 {
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+.-mx-4 {
+  margin-left: -1rem;
+  margin-right: -1rem;
 }
 
 .p-6 {
@@ -1436,12 +1459,12 @@ menu {
 
 .game-device-frame {
   border-radius: 1.5rem;
-  border: 4px solid rgb(64 64 64);
+  border: 6px solid rgb(80 80 80);
   box-shadow:
     inset 0 0 0 2px rgba(0, 0, 0, 0.3),
-    0 10px 40px -10px rgba(0, 0, 0, 0.5);
-  padding: 0.5rem;
-  background: #1a1a1a;
+    0 8px 24px -8px rgba(0, 0, 0, 0.6);
+  padding: 0.75rem;
+  background: hsl(var(--b2));
 }
 
 .screenshot-carousel {
@@ -1592,6 +1615,14 @@ menu {
 }
 
 @media (min-width: 768px) {
+  .md\:px-8 {
+    padding-left: 2rem;
+    padding-right: 2rem;
+  }
+  .md\:-mx-8 {
+    margin-left: -2rem;
+    margin-right: -2rem;
+  }
   .md\:-mx-4 {
     margin-left: -1rem;
     margin-right: -1rem;
@@ -1673,6 +1704,31 @@ menu {
 @media (min-width: 640px) {
   .sm\:grid-cols-2 {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .sm\:px-6 {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+  .sm\:p-6 {
+    padding: 1.5rem;
+  }
+  .sm\:-mx-6 {
+    margin-left: -1.5rem;
+    margin-right: -1.5rem;
+  }
+  .sm\:rounded-xl {
+    border-radius: 0.75rem;
+  }
+  .sm\:border {
+    border-width: 1px;
+  }
+  .sm\:mx-0 {
+    margin-left: 0;
+    margin-right: 0;
+  }
+  .sm\:-mx-2 {
+    margin-left: -0.5rem;
+    margin-right: -0.5rem;
   }
 }
 
