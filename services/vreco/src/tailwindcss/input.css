@@ -28,6 +28,64 @@ menu {
 @tailwind components;
 @tailwind utilities;
 
+@layer components {
+  /* Hamburger nav: hide on desktop (lg+), show on mobile */
+  @media (min-width: 1024px) {
+    .lg\:hidden {
+      display: none;
+    }
+  }
+
+  /* Desktop nav: show on lg+, hide on mobile */
+  @media (max-width: 1023px) {
+    .max-lg\:hidden {
+      display: none;
+    }
+  }
+
+  .max-w-game-preview {
+    max-width: 16rem;
+  }
+
+  @media (min-width: 1024px) {
+    .lg\:max-w-game-preview {
+      max-width: 20rem;
+    }
+  }
+
+  .game-device-frame {
+    border-radius: 1.5rem;
+    border: 6px solid rgb(80 80 80);
+    box-shadow:
+      inset 0 0 0 2px rgba(0, 0, 0, 0.3),
+      0 8px 24px -8px rgba(0, 0, 0, 0.6);
+    padding: 0.75rem;
+    background: hsl(var(--b2));
+  }
+
+  .screenshot-carousel {
+    display: flex;
+    gap: 1.5rem;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
+    padding: 0.5rem 0 1rem;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  .screenshot-carousel::-webkit-scrollbar {
+    display: none;
+  }
+
+  .screenshot-carousel-slide {
+    flex: 0 0 auto;
+    scroll-snap-align: center;
+    width: 16rem;
+  }
+}
+
 @layer utilities {
   .pixel-art {
     image-rendering: pixelated;

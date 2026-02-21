@@ -32,37 +32,47 @@
       
   </head>
 
-
-</html>
-<body>
-  <nav class="navbar bg-base-100">
+  <body>
+  <nav class="navbar bg-base-100 overflow-visible">
     <div class="flex items-center flex-shrink-0 text-white mr-6">
       <a href="/">
-        <img class="object-scale h-18 w-32" src="/logo.svg" />
+        <img class="object-scale h-18 w-32" src="/logo.svg" alt="Vreco" />
       </a>
-      <div class="w-full flex-grow flex items-center p-2">
-        <div class="text-sm lg:flex-grow">
-          <a href="/blog" class="btn btn-ghost normal-case text-lg">
-            Blog
-          </a>
+      <!-- Mobile: hamburger menu (hidden on lg+) -->
+      <details class="relative lg:hidden ml-2 overflow-visible">
+        <summary class="btn btn-ghost btn-square p-2 min-h-0 h-10 w-10 cursor-pointer list-none" aria-label="Open menu">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+          </svg>
+        </summary>
+        <ul class="absolute left-0 top-full mt-1 bg-base-100 rounded-lg border border-base-300 p-2 min-w-48 shadow-xl z-50">
+          <li class="list-none"><a href="/blog" class="btn btn-ghost normal-case text-lg justify-start w-full">Blog</a></li>
+          <li class="list-none"><a href="/games" class="btn btn-ghost normal-case text-lg justify-start w-full">Games</a></li>
+          <li class="list-none"><a href="/about" class="btn btn-ghost normal-case text-lg justify-start w-full">About Me</a></li>
+          <li class="list-none"><a href="/privacy" class="btn btn-ghost normal-case text-lg justify-start w-full">Privacy</a></li>
+        </ul>
+      </details>
+    </div>
+    <!-- Desktop: horizontal nav (hidden on mobile) - links grouped left, not spread -->
+    <div class="flex items-center p-2 max-lg:hidden text-white">
+        <div class="text-sm">
+          <a href="/blog" class="btn btn-ghost normal-case text-lg text-white">Blog</a>
         </div>
-        <div class="block mt-4
-          text-grey-800 p-2">|</div>
-        <div class="text-sm flex-grow">
-          <a href="/games" class="btn btn-ghost normal-case text-lg">Games</a>
+        <div class="block mt-4 text-white p-2">|</div>
+        <div class="text-sm">
+          <a href="/games" class="btn btn-ghost normal-case text-lg text-white">Games</a>
         </div>
-        <div class="block mt-4
-          text-grey-800 p-2">|</div>
-        <div class="text-sm flex-grow">
-          <a href="/about" class="btn btn-ghost normal-case text-lg">About Me
-          </a>
+        <div class="block mt-4 text-white p-2">|</div>
+        <div class="text-sm">
+          <a href="/about" class="btn btn-ghost normal-case text-lg text-white">About Me</a>
         </div>
-        <div class="block mt-4
-          text-grey-800 p-2">|</div>
-        <div class="text-sm flex-grow">
-          <a href="/privacy" class="btn btn-ghost normal-case text-lg">Privacy</a>
+        <div class="block mt-4 text-white p-2">|</div>
+        <div class="text-sm">
+          <a href="/privacy" class="btn btn-ghost normal-case text-lg text-white">Privacy</a>
         </div>
-      </nav>
+    </div>
+  </nav>
       {{template "body" . }}
-    </body>
-    {{end}}
+  </body>
+</html>
+{{end}}
