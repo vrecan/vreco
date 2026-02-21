@@ -1,0 +1,15 @@
+[
+  {
+    "relation": [
+      "delegate_permission/common.handle_all_urls",
+      "delegate_permission/common.get_login_creds"
+    ],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.vreco.blockening",
+      "sha256_cert_fingerprints": [
+        "80:A3:66:30:E2:74:FC:8D:15:7A:78:87:BA:BF:CC:CB:F2:DD:A9:10:FE:78:23:1E:C2:46:FC:6E:0D:52:61:D1"
+      ]
+    }
+  }
+]

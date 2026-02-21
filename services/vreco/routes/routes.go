@@ -136,6 +136,7 @@ func Setup(e *echo.Echo) error {
 	templates["blog_card.html"] = template.Must(template.New("").Funcs(functionMap).ParseFiles(
 		"templates/partials/blog_card.html"))
 	templates["about.html"] = template.Must(template.New("").Funcs(functionMap).ParseFiles("templates/pages/about.html", "templates/base.html"))
+	templates["privacy.html"] = template.Must(template.New("").Funcs(functionMap).ParseFiles("templates/pages/privacy.html", "templates/base.html"))
 	templates["games.html"] = template.Must(template.New("").Funcs(functionMap).ParseFiles("templates/pages/games.html", "templates/base.html"))
 	templates["game.html"] = template.Must(template.New("").Funcs(functionMap).ParseFiles("templates/pages/game.html", "templates/base.html"))
 	templates["clicked.html"] = template.Must(template.New("").Funcs(functionMap).ParseFiles("templates/partials/clicked.html"))
@@ -234,6 +235,9 @@ func Setup(e *echo.Echo) error {
 	})
 	root.GET("about", func(c echo.Context) error {
 		return c.Render(http.StatusOK, "about.html", map[string]interface{}{})
+	})
+	root.GET("privacy", func(c echo.Context) error {
+		return c.Render(http.StatusOK, "privacy.html", map[string]interface{}{})
 	})
 	root.GET("games", func(c echo.Context) error {
 		return c.Render(http.StatusOK, "games.html", map[string]interface{}{
