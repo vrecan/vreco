@@ -1,0 +1,103 @@
+{{define "title"}} Blockening Account {{end}}
+{{define "body"}}
+<div class="flex flex-col max-w-5xl mx-auto lg:max-w-6xl px-4 sm:px-6 md:px-8 py-8">
+  <a href="/games/blockening" class="btn btn-ghost normal-case text-base gap-2 mb-6 w-fit">
+    <span>←</span>
+    <span>Back to Blockening</span>
+  </a>
+
+  <div class="card bg-base-100 shadow-xl border border-base-300/50">
+    <div class="card-body">
+      <h1 class="text-3xl font-bold text-primary mb-2">Blockening Account</h1>
+      <p class="text-base-content/70 mb-6">Manage your Blockening game account. Use the same username and password you use in the game.</p>
+
+      {{if .NotConfigured}}
+      <div class="alert alert-warning mb-4">
+        <span>Account management is not configured. Please contact the site administrator.</span>
+      </div>
+      {{else}}
+      {{if .Flash}}
+      <div class="alert alert-success mb-4">
+        <span>{{if eq .Flash "account_deleted"}}Your account has been deleted successfully.{{else}}{{.Flash}}{{end}}</span>
+      </div>
+      {{end}}
+
+      {{if .FlashError}}
+      <div class="alert alert-error mb-4">
+        <span>
+          {{if eq .FlashError "invalid_credentials"}}Invalid username or password.
+          {{else if eq .FlashError "missing_credentials"}}Username and password are required.
+          {{else if eq .FlashError "verification_required"}}Email verification is required. Please verify your email in the game first.
+          {{else if eq .FlashError "delete_failed"}}Could not delete account. Please check your password and try again.
+          {{else if eq .FlashError "password_required"}}Password is required to delete your account.
+          {{else if eq .FlashError "not_logged_in"}}Please log in first.
+          {{else if eq .FlashError "session_invalid"}}Session expired. Please log in again.
+          {{else}}An error occurred. Please try again.
+          {{end}}
+        </span>
+      </div>
+      {{end}}
+
+      {{if .LoggedIn}}
+      <div class="space-y-6">
+        <section class="bg-base-200/30 rounded-xl p-4 sm:p-6 border border-base-300/50">
+          <h2 class="text-xl font-bold text-primary mb-3">Profile</h2>
+          <p class="text-base-content/90 mb-4">Logged in as <strong>{{.Identifier}}</strong></p>
+          <form method="post" action="/games/blockening/account/logout" class="inline">
+            <input type="hidden" name="csrf" value="{{.CSRFToken}}" />
+            <button type="submit" class="btn btn-ghost normal-case text-lg">Log out</button>
+          </form>
+        </section>
+
+        <section class="bg-base-200/30 rounded-xl p-4 sm:p-6 border border-base-300/50">
+          <h2 class="text-xl font-bold text-primary mb-3">Delete Account</h2>
+          <p class="text-base-content/90 mb-4">Permanently delete your Blockening account and all associated data. This action cannot be undone.</p>
+          <button type="button" class="btn btn-error btn-lg normal-case" onclick="delete_modal.showModal()">Delete my account</button>
+        </section>
+      </div>
+
+      <dialog id="delete_modal" class="modal">
+        <div class="modal-box">
+          <h3 class="font-bold text-lg text-error">Delete Account</h3>
+          <p class="py-4">This will permanently delete your account and all game data. This action cannot be undone.</p>
+          <p class="text-sm text-base-content/70 mb-4">Enter your password to confirm:</p>
+          <form method="post" action="/games/blockening/account/delete">
+            <input type="hidden" name="csrf" value="{{.CSRFToken}}" />
+            <input type="password" name="currentPassword" placeholder="Your password" class="input input-bordered w-full mb-4" required />
+            <div class="modal-action">
+              <button type="button" class="btn btn-ghost normal-case text-lg" onclick="delete_modal.close()">Cancel</button>
+              <button type="submit" class="btn btn-error btn-lg normal-case">Delete account</button>
+            </div>
+          </form>
+        </div>
+        <form method="dialog" class="modal-backdrop">
+          <button>close</button>
+        </form>
+      </dialog>
+      {{else}}
+      <section class="bg-base-200/30 rounded-xl p-4 sm:p-6 border border-base-300/50">
+        <h2 class="text-xl font-bold text-primary mb-4">Log in</h2>
+        <div class="text-base-content/70 mb-4">Use the same username and password you use in the Blockening game.</div>
+        <form method="post" action="/games/blockening/account/login" class="space-y-4 max-w-md">
+          <input type="hidden" name="csrf" value="{{.CSRFToken}}" />
+          <div class="form-control">
+            <label class="label" for="identifier">
+              <span class="label-text">Username</span>
+            </label>
+            <input type="text" id="identifier" name="identifier" placeholder="Your username" class="input input-bordered w-full" required />
+          </div>
+          <div class="form-control">
+            <label class="label" for="password">
+              <span class="label-text">Password</span>
+            </label>
+            <input type="password" id="password" name="password" placeholder="Your password" class="input input-bordered w-full" required />
+          </div>
+          <button type="submit" class="btn btn-primary btn-lg normal-case">Log in</button>
+        </form>
+      </section>
+      {{end}}
+      {{end}}
+    </div>
+  </div>
+</div>
+{{end}}

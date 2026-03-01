@@ -139,12 +139,17 @@ func Setup(e *echo.Echo) error {
 	templates["privacy.html"] = template.Must(template.New("").Funcs(functionMap).ParseFiles("templates/pages/privacy.html", "templates/base.html"))
 	templates["games.html"] = template.Must(template.New("").Funcs(functionMap).ParseFiles("templates/pages/games.html", "templates/base.html"))
 	templates["game.html"] = template.Must(template.New("").Funcs(functionMap).ParseFiles("templates/pages/game.html", "templates/base.html"))
+	templates["blockening_account.html"] = template.Must(template.New("").Funcs(functionMap).ParseFiles("templates/pages/blockening_account.html", "templates/base.html"))
 	templates["clicked.html"] = template.Must(template.New("").Funcs(functionMap).ParseFiles("templates/partials/clicked.html"))
 	templates["chat_msg.html"] = template.Must(template.New("").Funcs(functionMap).ParseFiles("templates/partials/chat_msg.html"))
 	templates["chat_input.html"] = template.Must(template.New("").Funcs(functionMap).ParseFiles("templates/partials/chat_input.html"))
 
 	e.Renderer = &TemplateRegistry{
 		templates: templates,
+	}
+
+	if err := SetupBlockeningAccount(e); err != nil {
+		return err
 	}
 
 	root := e.Group("/", vMiddleware.CacheControl(0))

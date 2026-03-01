@@ -121,6 +121,14 @@
     </section>
     {{end}}
 
+    {{if eq .game.Slug "blockening"}}
+    <section class="bg-base-200/30 rounded-none sm:rounded-xl p-4 sm:p-6 md:p-8 border-y border-base-300/50 sm:border sm:border-base-300/50">
+      <h2 class="text-xl md:text-2xl font-bold text-primary border-l-4 border-primary pl-4 mb-4">Account</h2>
+      <p class="text-base-content/90 leading-relaxed mb-4">Manage your Blockening account, including the option to delete your account and data.</p>
+      <a href="/games/blockening/account" class="btn btn-primary">Manage your Blockening account</a>
+    </section>
+    {{end}}
+
     <section class="flex flex-col sm:flex-row sm:items-center gap-4 p-4 sm:p-6 rounded-none sm:rounded-xl bg-base-200/50 border-y border-base-300/50 sm:border sm:border-base-300/50">
       <div>
         <h2 class="text-xl font-bold text-primary mb-3">Tech Stack</h2>

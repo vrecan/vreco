@@ -10,13 +10,16 @@ import (
 	"vreco/routes"
 
 	DEATH "github.com/vrecan/death/v3"
-
+	"github.com/joho/godotenv"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 	"github.com/labstack/gommon/log"
 )
 
 func main() {
+	// Load .env from cwd or parent (run from services/vreco or project root)
+	_ = godotenv.Load(".env", "../.env")
+
 	death := DEATH.NewDeath(SYS.SIGINT, SYS.SIGTERM)
 
 	e := echo.New()
