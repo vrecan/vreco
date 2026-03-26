@@ -28,15 +28,21 @@
         {{if $game.Tagline}}
         <p class="text-lg text-base-content/80 font-medium mt-3">{{$game.Tagline}}</p>
         {{end}}
-        <div class="flex flex-wrap justify-center lg:justify-start gap-2 mt-5">
+        <div class="flex flex-wrap justify-center lg:justify-start items-center gap-2 mt-5">
           {{range $game.Availability}}
-          <span class="badge badge-outline badge-sm">{{.}}</span>
+          {{if and (eq . "Available on Android") $game.PlayStoreURL}}
+          <a href="{{$game.PlayStoreURL}}" target="_blank" rel="noopener noreferrer" class="badge badge-primary badge-lg no-underline hover:opacity-90">{{.}}</a>
+          {{else}}
+          <span class="badge badge-outline badge-lg">{{.}}</span>
+          {{end}}
           {{end}}
           {{if $game.Status}}
-          <span class="badge badge-primary badge-sm">{{$game.Status}}</span>
+          <span class="badge badge-ghost badge-lg">{{$game.Status}}</span>
           {{end}}
         </div>
-        <a href="/games/{{$game.Slug}}" class="link link-hover text-primary mt-4 inline-block text-sm font-medium">View full page →</a>
+        <div class="flex flex-wrap items-center gap-4 mt-4">
+          <a href="/games/{{$game.Slug}}" class="link link-hover text-primary text-sm font-medium">View full page →</a>
+        </div>
       </div>
     </div>
     {{else}}
@@ -45,13 +51,20 @@
       {{if $game.Tagline}}
       <p class="text-lg text-base-content/80 mt-3">{{$game.Tagline}}</p>
       {{end}}
-      <div class="flex flex-wrap justify-center gap-2 mt-5">
+      <div class="flex flex-wrap justify-center items-center gap-2 mt-5">
         {{range $game.Availability}}
-        <span class="badge badge-outline badge-sm">{{.}}</span>
+        {{if and (eq . "Available on Android") $game.PlayStoreURL}}
+        <a href="{{$game.PlayStoreURL}}" target="_blank" rel="noopener noreferrer" class="badge badge-primary badge-lg no-underline hover:opacity-90">{{.}}</a>
+        {{else}}
+        <span class="badge badge-outline badge-lg">{{.}}</span>
+        {{end}}
         {{end}}
         {{if $game.Status}}
-        <span class="badge badge-primary badge-sm">{{$game.Status}}</span>
+        <span class="badge badge-ghost badge-lg">{{$game.Status}}</span>
         {{end}}
+      </div>
+      <div class="flex flex-wrap justify-center gap-4 mt-4">
+        <a href="/games/{{$game.Slug}}" class="link link-hover text-primary text-sm font-medium">View full page →</a>
       </div>
     </div>
     {{end}}

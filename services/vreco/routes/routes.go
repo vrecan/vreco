@@ -28,7 +28,7 @@ var games = []Game{
 	{
 		Slug:        "blockening",
 		Name:        "Blockening",
-		Tagline:     "Block Blast–style puzzle game for iOS and Android",
+		Tagline:     "Block puzzle with unlockable themes—cyberpunk, zen, terminal, and more",
 		Description: "Drop blocks, clear lines, chain combos. Place pre-shaped blocks on the grid—no rotation—and complete rows or columns to blast them away. The faster you clear, the bigger the bonus. Build combos, climb the leaderboards, and unlock themes as you master the grid.",
 		Features: []string{
 			"Block Blast–style puzzle: Drop blocks, clear full rows or columns, survive as long as you can",
@@ -38,9 +38,10 @@ var games = []Game{
 			"Themes: Unlock and switch between visual themes as you play",
 		},
 		Availability: []string{
-			"Coming soon on Android",
+			"Available on Android",
 			"Coming soon on iOS",
 		},
+		PlayStoreURL: "https://play.google.com/store/apps/details?id=com.vreco.blockening",
 		Status: "Active Development",
 		Screenshots: []string{
 			"/blockening/main_menu.png",
@@ -61,6 +62,7 @@ type Game struct {
 	Description   string
 	Features      []string
 	Availability  []string
+	PlayStoreURL  string
 	RepoURL       string
 	Status        string
 	Screenshots   []string
@@ -248,6 +250,13 @@ func Setup(e *echo.Echo) error {
 		return c.Render(http.StatusOK, "games.html", map[string]interface{}{
 			"games": games,
 		})
+	})
+	root.GET("games/:slug/app-ads.txt", func(c echo.Context) error {
+		slug := c.Param("slug")
+		if _, err := getGameBySlug(slug, games); err != nil {
+			return c.Render(http.StatusNotFound, "404.html", map[string]interface{}{})
+		}
+		return c.File("static/app-ads.txt")
 	})
 	root.GET("games/:slug", func(c echo.Context) error {
 		slug := c.Param("slug")

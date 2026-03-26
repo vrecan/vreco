@@ -24,6 +24,8 @@ func main() {
 
 	e := echo.New()
 	e.Logger.SetLevel(log.INFO)
+	// Normalize /path/ -> /path so routes match (e.g. /games/blockening/ from link generators).
+	e.Pre(middleware.RemoveTrailingSlash())
 	e.Use(middleware.RecoverWithConfig(middleware.RecoverConfig{
 		StackSize: 1 << 10, // 1 KB
 		LogLevel:  log.ERROR,

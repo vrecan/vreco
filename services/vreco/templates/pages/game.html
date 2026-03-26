@@ -21,12 +21,16 @@
       {{if .game.Tagline}}
       <p class="text-lg text-base-content/80 font-medium mt-3">{{.game.Tagline}}</p>
       {{end}}
-      <div class="flex flex-wrap justify-center lg:justify-start gap-2 mt-5">
+      <div class="flex flex-wrap justify-center lg:justify-start items-center gap-2 mt-5">
         {{range .game.Availability}}
-        <span class="badge badge-lg badge-primary">{{.}}</span>
+        {{if and (eq . "Available on Android") $.game.PlayStoreURL}}
+        <a href="{{$.game.PlayStoreURL}}" target="_blank" rel="noopener noreferrer" class="badge badge-primary badge-lg no-underline hover:opacity-90">{{.}}</a>
+        {{else}}
+        <span class="badge badge-outline badge-lg">{{.}}</span>
+        {{end}}
         {{end}}
         {{if .game.Status}}
-        <span class="badge badge-lg badge-ghost">{{.game.Status}}</span>
+        <span class="badge badge-ghost badge-lg">{{.game.Status}}</span>
         {{end}}
       </div>
     </div>
@@ -39,12 +43,16 @@
         {{if .game.Tagline}}
         <p class="py-4 text-xl text-base-content/80 font-medium">{{.game.Tagline}}</p>
         {{end}}
-        <div class="flex flex-wrap justify-center gap-2 py-4">
+        <div class="flex flex-wrap justify-center items-center gap-2 py-4">
           {{range .game.Availability}}
-          <span class="badge badge-lg badge-primary">{{.}}</span>
+          {{if and (eq . "Available on Android") $.game.PlayStoreURL}}
+          <a href="{{$.game.PlayStoreURL}}" target="_blank" rel="noopener noreferrer" class="badge badge-primary badge-lg no-underline hover:opacity-90">{{.}}</a>
+          {{else}}
+          <span class="badge badge-outline badge-lg">{{.}}</span>
+          {{end}}
           {{end}}
           {{if .game.Status}}
-          <span class="badge badge-lg badge-ghost">{{.game.Status}}</span>
+          <span class="badge badge-ghost badge-lg">{{.game.Status}}</span>
           {{end}}
         </div>
       </div>
@@ -118,6 +126,14 @@
         </li>
         {{end}}
       </ul>
+    </section>
+    {{end}}
+
+    {{if .game.PlayStoreURL}}
+    <section class="bg-base-200/30 rounded-none sm:rounded-xl p-4 sm:p-6 md:p-8 border-y border-base-300/50 sm:border sm:border-base-300/50">
+      <h2 class="text-xl md:text-2xl font-bold text-primary border-l-4 border-primary pl-4 mb-4">Download</h2>
+      <p class="text-base-content/90 leading-relaxed mb-4">Get {{.game.Name}} on Google Play.</p>
+      <a href="{{.game.PlayStoreURL}}" target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-lg normal-case">Get it on Google Play</a>
     </section>
     {{end}}
 
